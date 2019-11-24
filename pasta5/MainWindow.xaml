@@ -6,10 +6,21 @@
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
         Title="pasta5" Height="450" Width="800">
-    <Grid>
-        
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" >
+    <Grid Width="768" Height="390" HorizontalAlignment="Center" VerticalAlignment="Center">
+       <!--
+        1. Adicionar uma text input field que receba copy-paste;
+        2. Criar uma folder num local especifico, com o texto inserido no input field;
+        3. Criar uma sub-folder com o nome "textures";
+        4. Copiar a path da folder criada para o clipboard
+        -->
+        <Button Content="create folder" Width="100" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button.Margin>
+                <Thickness Left="10" Top="20" Right="10" Bottom="30"/>
+            </Button.Margin>
+        </Button>
+        <!-- <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
             Goodbye World!
         </TextBlock>
+         -->
     </Grid>
 </Window>
