@@ -41,5 +41,24 @@ namespace pasta5 {
                 Console.Error.WriteLine(ex.ToString());
             }
         }
+
+        private void Btn_move_obj_dds_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            resultTextBox.Text = "test";
+            /*
+            string objExtension = "*.obj";
+
+            
+            string[] objFiles = Directory.GetFiles(objFolder, objExtension);
+
+            foreach (var item in objFiles)
+            {
+                File.Move(item, Path.Combine("Destination Directory", Path.GetFileName(item)));
+            }
+
+            */
+            // b. Move all .DDS files found in "var OriginalFilesPath" to TargetPath + Folder_name + "textures"
+           // var ddsFolder = Path.Combine(path, dumpedFolderName, "Texture");
+        }
     }
 }

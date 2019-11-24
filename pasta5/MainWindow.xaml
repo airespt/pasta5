@@ -5,21 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" Height="180" Width="802" FontSize="12" FontFamily="Arial" VerticalAlignment="Top">
-    <StackPanel> 
+        Title="pasta5" Height="225" Width="802" FontSize="12" FontFamily="Arial" VerticalAlignment="Top">
+    <StackPanel Width="750">
+        <!-- DumpFolderPath -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+            <TextBlock VerticalAlignment="Center">
+                Dump Path
+            </TextBlock>
+            <TextBox x:Name="DumpPath" Width="628"
+                     Text="s:\from\"
+            />
+        </StackPanel>
         <!-- TargetPath -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
             <TextBlock VerticalAlignment="Center">
-                path
+                FBX Path
             </TextBlock>
             <TextBox x:Name="TargetPath" Width="628"
-                     Text="c:\pasta5\"
+                     Text="s:\to\"
             />
         </StackPanel>
         <!-- FolderName -->
-        <TextBox x:Name="Folder_name" Background="White" Width="728" Height="54" BorderBrush="Black" SelectionBrush="Black"
+        <TextBox x:Name="Folder_name" Background="White" Height="54" BorderBrush="Black" SelectionBrush="Black"
                  FontSize="24" FontFamily="Lucida Sans Unicode" VerticalAlignment="Top" HorizontalAlignment="Center"
-                 PreviewMouseLeftButtonUp="Folder_name_MouseLeftButtonUp" TextChanged="Folder_name_TextChanged"
+                 PreviewMouseLeftButtonUp="Folder_name_MouseLeftButtonUp" TextChanged="Folder_name_TextChanged" Width="750"
         />
+        <TextBlock Text="Move .obj and .dds files, batch converted in Noesis, to newly created folder in Dev Tools FBX folder." Margin="0,6,0,0" />
+        <!-- .OBJ & .DDS File Move -->
+        <Button x:Name="btn_move_obj_dds" Width="218" Margin="0,14,0,0" FontFamily="Segoe UI" FontSize="14" MouseLeftButtonUp="Btn_move_obj_dds_MouseLeftButtonUp" Content="Move Files" Height="28"/>
+        <!-- result -->
+        <TextBox x:Name="resultTextBox" Width="628" />
     </StackPanel>
 </Window>
