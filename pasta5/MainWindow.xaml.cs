@@ -21,5 +21,15 @@ namespace pasta5 {
         public MainWindow() {
             InitializeComponent();
         }
+
+        private void Folder_name_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // selecionar o texto, para poder fazer um paste
+        }
+
+        private void Folder_name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // quando o paste é feito, correr as instruçoes definido em MainWindow.xaml
+        }
     }
 }
