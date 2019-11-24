@@ -5,19 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" Height="180" Width="802" FontSize="10" FontWeight="Bold" FontFamily="Arial Black" VerticalAlignment="Top">
+        Title="pasta5" Height="180" Width="802" FontSize="12" FontFamily="Arial" VerticalAlignment="Top">
     <StackPanel> 
         <!-- TargetPath -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
             <TextBlock VerticalAlignment="Center">
                 path
             </TextBlock>
-            <TextBox x:Name="TargetPath" Background="White" Width="628"
-                 FontFamily="Lucida Sans Unicode" Text="c:\jogo\pasta"
+            <TextBox x:Name="TargetPath" Width="628"
+                     Text="c:\pasta5\"
             />
         </StackPanel>
         <!-- FolderName -->
-        <TextBox x:Name="Folder_name" Grid.Row="2" Background="White" Width="728" Height="54" BorderBrush="Black" SelectionBrush="Black"
+        <TextBox x:Name="Folder_name" Background="White" Width="728" Height="54" BorderBrush="Black" SelectionBrush="Black"
                  FontSize="24" FontFamily="Lucida Sans Unicode" VerticalAlignment="Top" HorizontalAlignment="Center"
                  PreviewMouseLeftButtonUp="Folder_name_MouseLeftButtonUp" TextChanged="Folder_name_TextChanged"
         />

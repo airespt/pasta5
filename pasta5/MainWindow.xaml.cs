@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace pasta5 {
     /// <summary>
@@ -22,13 +13,13 @@ namespace pasta5 {
             InitializeComponent();
         }
 
-        private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs ev)
         {
             // selecionar o texto, para poder fazer um paste
             Folder_name.SelectAll();
         }
 
-        private void Folder_name_TextChanged(object sender, TextChangedEventArgs e)
+        private void Folder_name_TextChanged(object sender, TextChangedEventArgs ev)
         {
             // quando o paste é feito, correr as instruçoes
             /*
@@ -37,6 +28,14 @@ namespace pasta5 {
             3.Criar uma sub-folder nesta folder nova com o nome "textures";
             4.Copiar a path da folder para o clipboard;
             */
+            try {
+                var path = Path.Combine(TargetPath.Text, Folder_name.Text);
+                Directory.CreateDirectory(path);
+                Clipboard.SetText(path);
+            }
+            catch( Exception ex ) {
+                Console.Error.WriteLine(ex.ToString());
+            }
         }
     }
 }
