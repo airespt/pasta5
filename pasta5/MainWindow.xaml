@@ -33,7 +33,5 @@
         <TextBlock Text="Move .obj and .dds files, batch converted in Noesis, to newly created folder in Dev Tools FBX folder." Margin="0,6,0,0" />
         <!-- .OBJ & .DDS File Move -->
         <Button x:Name="btn_move_obj_dds" Width="218" Margin="0,14,0,0" FontFamily="Segoe UI" FontSize="14"  Click="Btn_move_obj_dds_Click" Content="Move Files" Height="28"/>
-        <!-- result -->
-        <TextBox x:Name="resultTextBox" Width="628" />
     </StackPanel>
 </Window>

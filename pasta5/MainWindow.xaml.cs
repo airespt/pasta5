@@ -44,33 +44,47 @@ namespace pasta5 {
 
         private void Btn_move_obj_dds_Click(object sender, RoutedEventArgs e)
         {
-            var path = DumpPath.Text; // Folder path where the Dumper exports the files to.
-            var dumpedFolderName = Folder_name.Text; // Folder name created with "paste".
-            var dumpObjFolder = Path.Combine(path, dumpedFolderName, "RenderMesh"); // Folder name of where objs are dumped to.
-
-            var targetPath = Path.Combine(TargetPath.Text, Folder_name.Text); // Where to copy files to.
+            var objFolder = Path.Combine(DumpPath.Text, Folder_name.Text, "RenderMesh"); // Folder where .objs are.
+            var newFolder = Path.Combine(TargetPath.Text, Folder_name.Text); // Folder to copy files to.
             // On "Mouse Click":
-            // 1. Check if folder named with TextBox inout text exists;
+            // 1. Check if folder named with TextBox input text exists;
 
             // 2. If it does:
             // a. Move all .OBJ files
-           
+            string sourceDirectory = objFolder; // @"C:\current";
+            string archiveDirectory = newFolder; // @"C:\archive";
 
-            string objExtension = "*.obj";
-            string[] objFiles = Directory.GetFiles(dumpObjFolder, objExtension);
 
+            var objFiles = Directory.EnumerateFiles(sourceDirectory, "*.obj", SearchOption.AllDirectories);
+
+                foreach (string currentFile in objFiles)
+                {
+                    string fileName = currentFile.Substring(sourceDirectory.Length + 1);
+                    Directory.Move(currentFile, Path.Combine(archiveDirectory, fileName));
+                }
+
+
+            /*
+            string[] objFiles = Directory.EnumerateFiles(objFolder.ToString(), "*.obj");
+            var i = 0;
             foreach (var item in objFiles)
             {
-                resultTextBox.Text = Path.Combine(targetPath, item);
-
-                var src = Path.Combine(path, dumpedFolderName, item);
+                var src = Path.Combine(dumpedFilesFolderPath, folderName, item);
                 var dst = Path.Combine(targetPath, item);
-                Console.Error.WriteLine("src: " + src);
-                Console.Error.WriteLine("dst: " + dst);
+                if (i == 0) {
+                    Console.Error.WriteLine(item);
+                    Console.Error.WriteLine(dumpedFilesFolderPath);
+                    Console.Error.WriteLine(folderName);
+                    Console.Error.WriteLine(objFolder);
+                    Console.Error.WriteLine(targetPath);
+                    i++;
+                }
+                 /*Console.Error.WriteLine("src: " + src);
+                Console.Error.WriteLine("dst: " + dst);*/
 
-                File.Move(src, dst);
-            }
-            
+            // File.Move(src, dst);
+            //}
+
             // b. Move all .DDS files
             // var ddsFolder = Path.Combine(path, dumpedFolderName, "Texture");
 
