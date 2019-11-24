@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" >
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" >
             Goodbye World!
         </TextBlock>
     </Grid>
