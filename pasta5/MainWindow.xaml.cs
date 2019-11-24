@@ -54,15 +54,16 @@ namespace pasta5 {
             string sourceDirectory = objFolder; // @"C:\current";
             string archiveDirectory = newFolder; // @"C:\archive";
 
-
+            StatusLog.Clear();
             var objFiles = Directory.EnumerateFiles(sourceDirectory, "*.obj", SearchOption.AllDirectories);
+            foreach (string currentFile in objFiles)
+            {
+                StatusLog.AppendText(currentFile + Environment.NewLine);
 
-                foreach (string currentFile in objFiles)
-                {
-                    string fileName = currentFile.Substring(sourceDirectory.Length + 1);
-                    Directory.Move(currentFile, Path.Combine(archiveDirectory, fileName));
-                }
-
+                string fileName = Path.GetFileName(currentFile);
+                Directory.Move(currentFile, Path.Combine(archiveDirectory, fileName));
+            }
+            StatusLog.AppendText("DONE");
 
             /*
             string[] objFiles = Directory.EnumerateFiles(objFolder.ToString(), "*.obj");
