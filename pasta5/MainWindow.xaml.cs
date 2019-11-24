@@ -47,13 +47,15 @@ namespace pasta5 {
 
             var path = DumpPath.Text; // Folder path where the Dumper exports the files to.
             var dumpedFolderName = Folder_name.Text; // Folder name created with "paste".
-            var targetPath = Path.Combine(TargetPath.Text, Folder_name.Text);
+            var dumpObjFolder = Path.Combine(path, dumpedFolderName, "RenderMesh"); // Folder name of where objs are dumped to.
+
+            var targetPath = Path.Combine(TargetPath.Text, Folder_name.Text); // Where to copy files to.
             // On "Mouse Click":
             // 1. Check if folder named with TextBox inout text exists;
 
             // 2. If it does:
-            // a. Move all .OBJ files found in "var OriginalFilesPath" to TargetPath + Folder_name
-            var dumpObjFolder = Path.Combine(path, dumpedFolderName, "RenderMesh");
+            // a. Move all .OBJ files
+           
 
            
             
@@ -68,7 +70,7 @@ namespace pasta5 {
             }
             
             
-            // b. Move all .DDS files found in "var OriginalFilesPath" to TargetPath + Folder_name + "textures"
+            // b. Move all .DDS files
             // var ddsFolder = Path.Combine(path, dumpedFolderName, "Texture");
 
         }
