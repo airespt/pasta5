@@ -31,6 +31,10 @@ namespace pasta5 {
             try {
                 var path = Path.Combine(TargetPath.Text, Folder_name.Text);
                 Directory.CreateDirectory(path);
+
+                var tex = Path.Combine(path, "textures");
+                Directory.CreateDirectory(tex);
+
                 Clipboard.SetText(path);
             }
             catch( Exception ex ) {
