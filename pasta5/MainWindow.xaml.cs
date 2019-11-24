@@ -44,7 +44,6 @@ namespace pasta5 {
 
         private void Btn_move_obj_dds_Click(object sender, RoutedEventArgs e)
         {
-
             var path = DumpPath.Text; // Folder path where the Dumper exports the files to.
             var dumpedFolderName = Folder_name.Text; // Folder name created with "paste".
             var dumpObjFolder = Path.Combine(path, dumpedFolderName, "RenderMesh"); // Folder name of where objs are dumped to.
@@ -57,18 +56,20 @@ namespace pasta5 {
             // a. Move all .OBJ files
            
 
-           
-            
             string objExtension = "*.obj";
-
             string[] objFiles = Directory.GetFiles(dumpObjFolder, objExtension);
 
             foreach (var item in objFiles)
             {
                 resultTextBox.Text = Path.Combine(targetPath, item);
-                File.Move(Path.Combine(path, dumpedFolderName, item), Path.Combine(targetPath, item));
+
+                var src = Path.Combine(path, dumpedFolderName, item);
+                var dst = Path.Combine(targetPath, item);
+                Console.Error.WriteLine("src: " + src);
+                Console.Error.WriteLine("dst: " + dst);
+
+                File.Move(src, dst);
             }
-            
             
             // b. Move all .DDS files
             // var ddsFolder = Path.Combine(path, dumpedFolderName, "Texture");
