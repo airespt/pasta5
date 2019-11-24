@@ -22,14 +22,21 @@ namespace pasta5 {
             InitializeComponent();
         }
 
-        private void Folder_name_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             // selecionar o texto, para poder fazer um paste
+            Folder_name.SelectAll();
         }
 
         private void Folder_name_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // quando o paste é feito, correr as instruçoes definido em MainWindow.xaml
+            // quando o paste é feito, correr as instruçoes
+            /*
+            1.Adicionar uma TextBox que receba copy - paste;
+            2.Quando a TextBox recebe "paste", criar uma folder num local especifico, nomeada com o texto inserido na TextBox;
+            3.Criar uma sub-folder nesta folder nova com o nome "textures";
+            4.Copiar a path da folder para o clipboard;
+            */
         }
     }
 }

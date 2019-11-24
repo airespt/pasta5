@@ -5,15 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" Height="180" Width="802" FontSize="16" FontWeight="Bold" FontFamily="Arial Black" VerticalAlignment="Top">
-    <Grid Width="768" Height="114" HorizontalAlignment="Center" VerticalAlignment="Center">
-       <!--
-        1. Adicionar uma TextBox que receba copy-paste;
-        2. Quando a TextBox recebe "paste", criar uma folder num local especifico, nomeada com o texto inserido na TextBox;
-        3. Criar uma sub-folder nesta folder nova com o nome "textures";
-        4. Copiar a path da folder para o clipboard;
-        -->
-        <TextBox x:Name="folder_name"  MouseLeftButtonDown="Folder_name_MouseLeftButtonDown" TextChanged="Folder_name_TextChanged" Background="White" Height="54" BorderBrush="Black" FontSize="24" Width="728" FontFamily="Lucida Sans Unicode" SelectionBrush="Black" VerticalAlignment="Top" HorizontalAlignment="Center"  />
-
-    </Grid>
+        Title="pasta5" Height="180" Width="802" FontSize="10" FontWeight="Bold" FontFamily="Arial Black" VerticalAlignment="Top">
+    <StackPanel> 
+        <!-- TargetPath -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+            <TextBlock VerticalAlignment="Center">
+                path
+            </TextBlock>
+            <TextBox x:Name="TargetPath" Background="White" Width="628"
+                 FontFamily="Lucida Sans Unicode" Text="c:\jogo\pasta"
+            />
+        </StackPanel>
+        <!-- FolderName -->
+        <TextBox x:Name="Folder_name" Grid.Row="2" Background="White" Width="728" Height="54" BorderBrush="Black" SelectionBrush="Black"
+                 FontSize="24" FontFamily="Lucida Sans Unicode" VerticalAlignment="Top" HorizontalAlignment="Center"
+                 PreviewMouseLeftButtonUp="Folder_name_MouseLeftButtonUp" TextChanged="Folder_name_TextChanged"
+        />
+    </StackPanel>
 </Window>
