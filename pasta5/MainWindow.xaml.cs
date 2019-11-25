@@ -96,7 +96,7 @@ namespace pasta5 {
 
                 var newFolder = Path.Combine(TargetPath.Text, Folder_name.Text); // Created folder to move exported .obj and .dds files to
 
-                var processedFolder = Path.Combine(DumpPath.Text, "[COPIED TO FBX]"); // Folder to move dumpFolder when .objs and .dds are moved to newFolder
+                var processedFolder = Path.Combine(DumpPath.Text, "[COPIED TO FBX]", Folder_name.Text); // Folder to move dumpFolder when .objs and .dds are moved to newFolder
 
                 
 
