@@ -22,7 +22,7 @@ namespace pasta5 {
             if( ini.Load() ) {
                 //DumpPath.Text = ini.from;
                 // TargetPath.Text = ini.to;
-                DumpPath.Text = @"C:\Users\Tester\Desktop\ROTTR_DRMDumper_0.0.3a_r7\[MASS UNPACK - go through these in Noesis]";
+                DumpPath.Text = @"S:\ROTTR_DRMDumper_0.0.3a_r7\[MASS UNPACK - go through these in Noesis]";
                 TargetPath.Text = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider\[MASS UNPACK]";
 
             }
@@ -49,7 +49,7 @@ namespace pasta5 {
                 // Reset Any Previous Error Signals
                 btn_move_obj_dds.IsEnabled = true; // Re-enable MF&F button, case it was disabled when duplicated folder name was found.
                 StatusLog.Clear(); // Remove error message from status.
-
+                
                 // Check If To-Be-Created Directory Already Exists Anywhere
                 var dirs = from dir in Directory.EnumerateDirectories(TargetPathRoot, Folder_name.Text, SearchOption.AllDirectories) select dir;
                 if (dirs.Count<string>() != 0) // Folder exists. Halt process!
@@ -58,14 +58,14 @@ namespace pasta5 {
                     btn_move_obj_dds.IsEnabled = false; // Disable button, as a visual clue.
                 }
                 else
-                {
+                { 
                     // Folder doesn't exists. Continue process...
                     var path = Path.Combine(TargetPath.Text, Folder_name.Text);
                     Directory.CreateDirectory(path); // Create new folder.
 
                     var tex = Path.Combine(path, "textures");
                     Directory.CreateDirectory(tex); // Create "textures" sub-folder.
-
+                    
                     StatusLog.Text = "Folders created."; // Success
 
                     // Clipboard.SetText(path);
@@ -96,10 +96,9 @@ namespace pasta5 {
 
                 var newFolder = Path.Combine(TargetPath.Text, Folder_name.Text); // Created folder to move exported .obj and .dds files to
 
-                var processedFolder = "[exported to obj]"; // Folder to move dumpFolder when .objs and .dds are moved to newFolder
+                var processedFolder = Path.Combine(DumpPath.Text, "[COPIED TO FBX]"); // Folder to move dumpFolder when .objs and .dds are moved to newFolder
 
-
-                /* Actions */
+                
 
                 // Move all .OBJ files to newFolder
                 string sourceOBJDirectory = objDumpFolder;
@@ -123,11 +122,13 @@ namespace pasta5 {
 
                 foreach (string currentFile in ddsFiles)
                 {
-                    // StatusLog.AppendText(currentFile + Environment.NewLine);
-
                     string fileName = Path.GetFileName(currentFile);
                     Directory.Move(currentFile, Path.Combine(archiveDDSDirectory, fileName));
                 }
+
+                
+                Console.Error.WriteLine(dumpFolder);
+                Console.Error.WriteLine(processedFolder);
 
                 // When files are moved, move dumpFolder to processedFolder.
                 Directory.Move(dumpFolder, processedFolder);
