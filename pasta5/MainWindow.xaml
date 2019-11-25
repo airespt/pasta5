@@ -5,36 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" Height="320" MinHeight="195" Width="800" FontSize="12" FontFamily="Arial" VerticalAlignment="Top">
-    <StackPanel Width="750">
+        Title="pasta5" MinHeight="70" Width="500" FontSize="12" FontFamily="Arial" Height="223" Background="#FFF0F0F0">
+    
+    <StackPanel Margin="10" Height="172">
+        
+        <Button Height="40" Width="54" HorizontalAlignment="Right" VerticalAlignment="Top" Content="SAVE PATHS" FontSize="9" FontFamily="CATIA Symbols"/>
+        
         <!-- DumpFolderPath -->
-        <StackPanel Orientation="Horizontal" Margin="5 5" VerticalAlignment="Top" HorizontalAlignment="Center">
-            <TextBlock VerticalAlignment="Center">
-                Dump Path
+        <StackPanel Orientation="Horizontal" Margin="0,-40,70,0" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <TextBlock VerticalAlignment="Center" Margin="0,0,5,0" FontFamily="Segoe UI Light">
+                    Dump Path
             </TextBlock>
-            <TextBox x:Name="DumpPath" Width="628"
-                     Text="s:\from\"
-            />
+            <TextBox x:Name="DumpPath"
+                         Text="s:\from\" Width="300"
+                    />
         </StackPanel>
         <!-- TargetPath -->
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-            <TextBlock VerticalAlignment="Center">
-                FBX Path
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,-20,70,0" HorizontalAlignment="Right">
+            <TextBlock VerticalAlignment="Center" Margin="0,0,5,0" FontFamily="Segoe UI Light">
+                    FBX Path
             </TextBlock>
-            <TextBox x:Name="TargetPath" Width="628"
-                     Text="s:\to\"
-            />
+            <TextBox x:Name="TargetPath"
+                         Text="s:\to\" Width="300"
+                />
         </StackPanel>
-        <!-- FolderName -->
-        <TextBox x:Name="Folder_name" Background="White" Height="54" BorderBrush="Black" SelectionBrush="Black"
-                 FontSize="24" FontFamily="Lucida Sans Unicode" VerticalAlignment="Top" HorizontalAlignment="Center"
-                 PreviewMouseLeftButtonUp="Folder_name_MouseLeftButtonUp" TextChanged="Folder_name_TextChanged" Width="750"
-        />
-        <TextBlock Text="Move .obj and .dds files, batch converted in Noesis, to newly created folder in Dev Tools FBX folder." Margin="0 6 0 0" />
-        <!-- .OBJ & .DDS File Move -->
-        <Button x:Name="btn_move_obj_dds" Width="218" Margin="0 14 0 0" FontFamily="Segoe UI" FontSize="14"  Click="Btn_move_obj_dds_Click" Content="Move Files" Height="28"/>
 
-        <TextBox x:Name="StatusLog" Margin="0 6" Height="120"
+
+        <!-- Folder Name Paste Field -->
+        <TextBox
+                x:Name="Folder_name"
+                Text=""
+                Background="White"
+                Height="50"
+                Width="446"
+                FontSize="26"
+                FontFamily="Segoe UI Semibold"
+                Margin="0,10,0,0"
+                PreviewMouseLeftButtonUp="Folder_name_MouseLeftButtonUp"
+                TextChanged="Folder_name_TextChanged"
+                Cursor="Arrow"
+                VerticalAlignment="Center"
+                Padding="2,2,2,0"
+                IsTabStop="False" TextAlignment="Center" BorderThickness="1" BorderBrush="#FFE2E2E2" TextOptions.TextFormattingMode="Display"
+        />
+        <!-- Process Files and Folders Button -->
+        <Button
+                x:Name="btn_move_obj_dds"
+                Width="218"
+                Margin="0,10"
+                FontFamily="Segoe UI"
+                FontSize="14"
+                Click="Btn_move_obj_dds_Click"
+                Content="Process Files and Folders"
+                Height="28"
+                ToolTip="Moves .OBJ and .DDS files (batch converted in Noesis) to the new Dev Tools FBX folder." Background="#FF5892E2" Foreground="White" BorderBrush="#FF707070" BorderThickness="0" IsTabStop="False"
+            />
+
+        <TextBox x:Name="StatusLog" Margin="0,0,0,6"
                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                  Text="operations output"/>
     </StackPanel>
