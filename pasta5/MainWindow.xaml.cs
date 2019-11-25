@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,15 +9,29 @@ namespace pasta5 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+
+
     public partial class MainWindow : Window {
+        public IniSettings ini = new IniSettings();
+
         public MainWindow() {
             InitializeComponent();
+
+            if( ini.Load() ) {
+                DumpPath.Text = ini.from;
+                TargetPath.Text = ini.to;
+            }
         }
 
         private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs ev)
         {
             // selecionar o texto, para poder fazer um paste
             Folder_name.SelectAll();
+
+
+            ini.from = "abc";
+            ini.to = "def";
+            ini.Save();
         }
 
         private void Folder_name_TextChanged(object sender, TextChangedEventArgs ev)
@@ -84,16 +99,11 @@ namespace pasta5 {
                 Directory.Move(currentFile, Path.Combine(archiveDDSDirectory, fileName));
             }
 
-
             // When files are moved, move dumpFolder to processedFolder.
             Directory.Move(dumpFolder, processedFolder);
 
-
             // End Click.
             StatusLog.AppendText("DONE");
-
-            
-
         }
     }
 }

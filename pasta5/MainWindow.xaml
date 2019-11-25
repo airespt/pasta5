@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" Height="320" MinHeight="195" Width="802" FontSize="12" FontFamily="Arial" VerticalAlignment="Top">
+        Title="pasta5" Height="320" MinHeight="195" Width="800" FontSize="12" FontFamily="Arial" VerticalAlignment="Top">
     <StackPanel Width="750">
         <!-- DumpFolderPath -->
         <StackPanel Orientation="Horizontal" Margin="5 5" VerticalAlignment="Top" HorizontalAlignment="Center">
