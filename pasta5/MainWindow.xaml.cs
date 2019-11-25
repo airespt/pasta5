@@ -51,8 +51,8 @@ namespace pasta5 {
                 StatusLog.Clear(); // Remove error message from status.
                 
                 // Check If To-Be-Created Directory Already Exists Anywhere
-                var dirs = from dir in Directory.EnumerateDirectories(TargetPathRoot, Folder_name.Text, SearchOption.AllDirectories) select dir;
-                if (dirs.Count<string>() != 0) // Folder exists. Halt process!
+                var dirs = Directory.EnumerateDirectories(TargetPathRoot, Folder_name.Text, SearchOption.AllDirectories);
+                if( dirs.Any() ) // Folder exists. Halt process!
                 {
                     StatusLog.Text ="Folder already exists.";
                     btn_move_obj_dds.IsEnabled = false; // Disable button, as a visual clue.
