@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,58 +13,77 @@ namespace pasta5 {
 
 
     public partial class MainWindow : Window {
+        
         public IniSettings ini = new IniSettings();
 
         public MainWindow() {
             InitializeComponent();
 
             if( ini.Load() ) {
-                DumpPath.Text = ini.from;
-                TargetPath.Text = ini.to;
+                //DumpPath.Text = ini.from;
+                // TargetPath.Text = ini.to;
+                DumpPath.Text = @"C:\Users\Tester\Desktop\ROTTR_DRMDumper_0.0.3a_r7\[MASS UNPACK - go through these in Noesis]";
+                TargetPath.Text = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider\[MASS UNPACK]";
+
             }
         }
+        
 
+        
+        /************************** ON TEXTBOX PRESS */
         private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs ev)
         {
-            // selecionar o texto, para poder fazer um paste
-            Folder_name.SelectAll();
-
-
-            ini.from = "S:\from";
-            ini.to = "S:\to";
-            ini.Save();
+            Folder_name.SelectAll(); // Select all, readying for next "paste".
+            StatusLog.Clear(); // Remove message from status.
         }
 
+
+        /************************** ON TEXTBOX PASTE */
         private void Folder_name_TextChanged(object sender, TextChangedEventArgs ev)
         {
-            // quando o paste é feito, correr as instruçoes
-            /*
-            1.Adicionar uma TextBox que receba copy - paste;
-            2.Quando a TextBox recebe "paste", criar uma folder num local especifico, nomeada com o texto inserido na TextBox;
-            3.Criar uma sub-folder nesta folder nova com o nome "textures";
-            4.Copiar a path da folder para o clipboard;
-            */
             try {
-                var path = Path.Combine(TargetPath.Text, Folder_name.Text);
-                Directory.CreateDirectory(path);
 
-                var tex = Path.Combine(path, "textures");
-                Directory.CreateDirectory(tex);
+                // Variables
+                var TargetPathRoot = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider"; // Folder where all created folders exist!
 
-                Clipboard.SetText(path);
+                // Reset Any Previous Error Signals
+                btn_move_obj_dds.IsEnabled = true; // Re-enable MF&F button, case it was disabled when duplicated folder name was found.
+                StatusLog.Clear(); // Remove error message from status.
+
+                // Check If To-Be-Created Directory Already Exists Anywhere
+                var dirs = from dir in Directory.EnumerateDirectories(TargetPathRoot, Folder_name.Text, SearchOption.AllDirectories) select dir;
+                if (dirs.Count<string>() != 0) // Folder exists. Halt process!
+                {
+                    StatusLog.Text ="Folder already exists.";
+                    btn_move_obj_dds.IsEnabled = false; // Disable button, as a visual clue.
+                }
+                else
+                {
+                    // Folder doesn't exists. Continue process...
+                    var path = Path.Combine(TargetPath.Text, Folder_name.Text);
+                    Directory.CreateDirectory(path); // Create new folder.
+
+                    var tex = Path.Combine(path, "textures");
+                    Directory.CreateDirectory(tex); // Create "textures" sub-folder.
+
+                    StatusLog.Text = "Folders created."; // Success
+
+                    // Clipboard.SetText(path);
+                }
             }
             catch( Exception ex ) {
                 Console.Error.WriteLine(ex.ToString());
             }
         }
 
+
+        /************************** MOVE FILES & FOLDERS BUTTON */
         private void Btn_move_obj_dds_Click(object sender, RoutedEventArgs e)
         {
             // Check for empty, or whitespace folder name...
             if (String.IsNullOrEmpty(Folder_name.Text))
             {
-                StatusLog.Clear();
-                StatusLog.AppendText("Bad User!");
+                StatusLog.Text ="Bad User!";
             }
 
             // If good, proceed.
@@ -89,7 +109,7 @@ namespace pasta5 {
 
                 foreach (string currentFile in objFiles)
                 {
-                    StatusLog.AppendText(currentFile + Environment.NewLine);
+                   // StatusLog.AppendText(currentFile + Environment.NewLine);
 
                     string fileName = Path.GetFileName(currentFile);
                     Directory.Move(currentFile, Path.Combine(archiveOBJDirectory, fileName));
@@ -103,7 +123,7 @@ namespace pasta5 {
 
                 foreach (string currentFile in ddsFiles)
                 {
-                    StatusLog.AppendText(currentFile + Environment.NewLine);
+                    // StatusLog.AppendText(currentFile + Environment.NewLine);
 
                     string fileName = Path.GetFileName(currentFile);
                     Directory.Move(currentFile, Path.Combine(archiveDDSDirectory, fileName));
@@ -112,12 +132,20 @@ namespace pasta5 {
                 // When files are moved, move dumpFolder to processedFolder.
                 Directory.Move(dumpFolder, processedFolder);
 
-                // End Click.
-                StatusLog.AppendText("DONE");
+                StatusLog.Text = "Done."; // Success
             }
             
 
             
+        }
+
+
+        /************************** Save Paths Button */
+        private void Btn_save_paths_Click(object sender, RoutedEventArgs e)
+        {
+            // ini.from = @"C:\Users\Tester\Desktop\ROTTR_DRMDumper_0.0.3a_r7\[MASS UNPACK - go through these in Noesis]";
+            // ini.to = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider\[MASS UNPACK]";
+            // ini.Save();
         }
     }
 }
