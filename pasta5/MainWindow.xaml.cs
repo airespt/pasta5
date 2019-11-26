@@ -1,10 +1,11 @@
-﻿using System;
+﻿using HelixToolkit.Wpf;
+using System;
 using System.IO;
 using System.Linq; // For Enumerate Any()
-using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
 
 namespace pasta5 {
     /// <summary>
@@ -13,8 +14,8 @@ namespace pasta5 {
 
 
     public partial class MainWindow : Window {
-        
         public IniSettings ini = new IniSettings();
+        public ModelImporter modelImporter = new ModelImporter();
 
         public MainWindow() {
             InitializeComponent();
@@ -24,10 +25,8 @@ namespace pasta5 {
                 // TargetPath.Text = ini.to;
                 DumpPath.Text = @"S:\ROTTR_DRMDumper_0.0.3a_r7\[MASS UNPACK - go through these in Noesis]";
                 TargetPath.Text = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider\[MASS UNPACK]";
-
             }
         }
-        
 
         
         /************************** ON TEXTBOX PRESS */
@@ -141,6 +140,35 @@ namespace pasta5 {
             // ini.from = @"C:\Users\Tester\Desktop\ROTTR_DRMDumper_0.0.3a_r7\[MASS UNPACK - go through these in Noesis]";
             // ini.to = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider\[MASS UNPACK]";
             // ini.Save();
+        }
+
+        /************************* 3D Preview */
+        private void Viewport_DragOver(object sender, DragEventArgs e) {
+            e.Handled = true;
+            if( e.Data.GetDataPresent(DataFormats.FileDrop) ) {
+                var objPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if( objPaths[0].ToLower().EndsWith(".obj") ) {
+                    e.Effects = DragDropEffects.All;
+                    return;
+                }
+            }
+            e.Effects = DragDropEffects.None;
+        }
+
+        private void Viewport_Drop(object sender, DragEventArgs e) {
+            if( e.Data.GetDataPresent(DataFormats.FileDrop) ) {
+                var objPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                try {
+                    Model3DGroup model1 = modelImporter.Load(objPaths[0]);
+                    Model.Content = model1;
+                }
+                catch( Exception ex ) {
+                    Model.Content = null;
+                    Console.Error.WriteLine(ex.ToString());
+                }
+                //Focus(); // focus window. Fail
+            }
         }
     }
 }
