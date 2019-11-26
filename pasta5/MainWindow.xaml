@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" MinHeight="70" Width="500" FontSize="12" FontFamily="Arial" Height="223" Background="#FFF0F0F0" ResizeMode="NoResize" Topmost="True" AllowDrop="True">
+        Title="pasta5" MinHeight="70" Width="500" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" ResizeMode="NoResize" Topmost="True" AllowDrop="True" SizeToContent="Height">
     
     <StackPanel Margin="10">
         
@@ -61,20 +61,19 @@
                 IsTabStop="False" TextAlignment="Center" BorderThickness="1" BorderBrush="#FFE2E2E2" TextOptions.TextFormattingMode="Display" HorizontalAlignment="Center"
         />
         <!-- Process Files and Folders Button -->
-        <Button
-                x:Name="btn_move_obj_dds"
-                Width="218"
-                Margin="0,10"
-                FontFamily="Segoe UI"
-                FontSize="14"
-                Click="Btn_move_obj_dds_Click"
-                Content="Process Files and Folders"
-                Height="28"
-                ToolTip="Moves .OBJ and .DDS files (batch converted in Noesis) to the new Dev Tools FBX folder." Background="#FF5892E2" Foreground="White" BorderBrush="#FF707070" BorderThickness="0" IsTabStop="False"
+       
+        <TextBox
+                x:Name="StatusLog"
+                Margin="6,0"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto"
+                BorderThickness="0"
+                Background="#00000000"
+                FontFamily="Segoe UI Semibold"
+                Padding="0"
+                AllowDrop="False"
+                Focusable="False"
+                Cursor="Arrow" Width="441"
             />
-
-        <TextBox x:Name="StatusLog" Margin="6,0"
-                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                 BorderThickness="0" Background="#00000000" FontFamily="Segoe UI Semibold" Padding="0" AllowDrop="False" Focusable="False" Cursor="Arrow"/>
     </StackPanel>
 </Window>
