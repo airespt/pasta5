@@ -6,12 +6,13 @@
         xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" MinHeight="70" Width="690" MinWidth="200" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" ResizeMode="NoResize" Topmost="True" AllowDrop="True" SizeToContent="Height" >
+        Title="pasta5" MinHeight="70" Width="1000" MinWidth="200" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" ResizeMode="NoResize" Topmost="True" AllowDrop="True" SizeToContent="Height" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400" />
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="29*"/>
+            <ColumnDefinition Width="59*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -39,7 +40,7 @@
             />
 
 
-                <!-- Paths grid -->
+            <!-- Paths grid -->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
@@ -99,7 +100,7 @@
         <HelixToolkit:HelixViewport3D x:Name="Viewport" Grid.Column="1" Margin="5 0 0 0"
                                       BorderThickness="1" BorderBrush="LightGray"
                                       AllowDrop="True" DragOver="Viewport_DragOver" Drop="Viewport_Drop"
-                                      ZoomExtentsWhenLoaded="True">
+                                      ZoomExtentsWhenLoaded="True" Grid.ColumnSpan="2" Height="500">
             <!-- Remember to add light to the scene -->
             <HelixToolkit:SunLight/>
             <ModelVisual3D x:Name="Model">
