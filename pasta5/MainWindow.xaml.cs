@@ -76,6 +76,10 @@ namespace pasta5 {
         // on select item change
         private void FoldersItem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+
+            // Variables
+            // var renderMeshFolder;
+
             TreeView tree = (TreeView)sender;
             TreeViewItem temp = ((TreeViewItem)tree.SelectedItem);
 
@@ -99,8 +103,28 @@ namespace pasta5 {
                 temp = ((TreeViewItem)temp.Parent);
                 temp2 = @"\";
             }
-            //show user selected path
-            MessageBox.Show(SelectedImagePath);
+
+            /* Load obj list */
+            // Folder to search for obj files in.
+            var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh");
+
+            // 1 - Search selected folder for a RenderMesh subfolder. If it exists, load all .obj files from it, and it's subfolders.
+            if (Directory.Exists(renderMeshFolder))
+            {
+                MessageBox.Show("has RenderMesh");
+                /* TODO
+                var objFiles = Directory.EnumerateFiles(renderMeshFolder, "*.obj", SearchOption.AllDirectories);
+
+                foreach (string currentFile in objFiles)
+                {
+                    string fileName = Path.GetFileName(currentFile);
+
+
+                }
+                */
+            }
+
+            // MessageBox.Show(SelectedImagePath);
         }
         /* TreeView - End */
 
