@@ -34,7 +34,7 @@ namespace pasta5 {
         /* TreeView - Start */
         public string SelectedImagePath { get; set; }
 
-        // on window load, create the tree view with the logical drive letters
+        // Create the tree view with the logical drive letters - this gets called through Window.Loaded
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             foreach (string s in Directory.GetLogicalDrives())
@@ -49,7 +49,7 @@ namespace pasta5 {
             }
         }
 
-        // set the "on expand" class
+        // "on expand" class
         void Folder_Expanded(object sender, RoutedEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)sender;
@@ -102,8 +102,6 @@ namespace pasta5 {
             //show user selected path
             MessageBox.Show(SelectedImagePath);
         }
-
-
         /* TreeView - End */
 
 
@@ -220,7 +218,8 @@ namespace pasta5 {
             // ini.Save();
         }
 
-        /************************* 3D Preview */
+
+        /************************** 3D Preview */
         private void Viewport_DragOver(object sender, DragEventArgs e) {
             e.Handled = true;
             if( e.Data.GetDataPresent(DataFormats.FileDrop) ) {

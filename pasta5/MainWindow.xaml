@@ -7,11 +7,12 @@
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="pasta5" MinHeight="70" MinWidth="200" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" Topmost="True" AllowDrop="True" SizeToContent="Height" >
+        Title="pasta5" MinHeight="500" MinWidth="1000" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" AllowDrop="True" SizeToContent="Height" Height="500" Width="1000" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="361.716" />
+            <ColumnDefinition Width="38.284"/>
             <ColumnDefinition Width="29*"/>
             <ColumnDefinition Width="59*"/>
         </Grid.ColumnDefinitions>
@@ -20,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <!-- Left column-->
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -73,7 +74,11 @@
             </Grid>
 
             <!-- Full Width controls -->
-            <StackPanel Grid.ColumnSpan="2" Grid.Row="1" Margin="0 10 0 0">
+            <StackPanel 
+                Grid.ColumnSpan="2" 
+                Grid.Row="1" 
+                Margin="0 10 0 0"
+                >
                 <!-- Folder Name Paste Field -->
                 <TextBox x:Name="Folder_name"
                          Text=""
@@ -88,53 +93,87 @@
 
                 <!-- Process Files and Folders Button -->
                 <TextBox x:Name="StatusLog"
-                         MinHeight="20" VerticalAlignment="Stretch"
-                         Margin="0 5 0 0" Padding="2"
-                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                         MinHeight="20"
+                         VerticalAlignment="Stretch"
+                         Margin="0 5 0 0"
+                         Padding="2"
+                         HorizontalScrollBarVisibility="Auto"
+                         VerticalScrollBarVisibility="Auto"
                          BorderThickness="0"
                          FontFamily="Segoe UI Semibold"
                          Focusable="False"
                          Cursor="Arrow"
                 />
+                
+                <!-- TreeView and OBJView -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- ################## TreeView -->
+                    <TreeView x:Name="foldersItem"
+                        SelectedItemChanged="FoldersItem_SelectedItemChanged"
+                        Width="Auto" 
+                        Background="#FFFFFFFF" 
+                        BorderBrush="#FFFFFFFF" 
+                        Foreground="#FFFFFFFF"
+                        VerticalContentAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        >
+                        <TreeView.Resources>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <!--
+                                                <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
+                                           Source="{Binding 
+                                           RelativeSource={RelativeSource 
+                                           Mode=FindAncestor, 
+                                           AncestorType={x:Type TreeViewItem}}, 
+                                           Path=Header, 
+                                           Converter={x:Static local:HeaderToImageConverter.Instance}}"       
+                                           />
+                                                -->
+                                                <TextBlock Text="{Binding}" Margin="5,0" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TreeView.Resources>
+                    </TreeView>
 
-                <!-- ################## TreeView -->
-                <TreeView x:Name="foldersItem" SelectedItemChanged="FoldersItem_SelectedItemChanged" Width="Auto" Background="#FFFFFFFF" BorderBrush="#FFFFFFFF" Foreground="#FFFFFFFF">
-                    <TreeView.Resources>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="HeaderTemplate">
-                                <Setter.Value>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <!--
-                                            <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
-                                       Source="{Binding 
-                                       RelativeSource={RelativeSource 
-                                       Mode=FindAncestor, 
-                                       AncestorType={x:Type TreeViewItem}}, 
-                                       Path=Header, 
-                                       Converter={x:Static local:HeaderToImageConverter.Instance}}"       
-                                       />
-                                            -->
-                                            <TextBlock Text="{Binding}" Margin="5,0" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </TreeView.Resources>
-                </TreeView>
+                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                    
+                    <!-- ################## OBJView -->
+                    <TreeView x:Name="objListTreeView"
+                              Grid.Column="2"
+                              HorizontalContentAlignment="Stretch"
+                              >
+                        <TreeViewItem Header="hello"/>
+                    </TreeView>
+                </Grid>
+                
             </StackPanel>
-
-
-
-            
         </Grid>
 
         <!-- ################## 3D View-->
-        <HelixToolkit:HelixViewport3D x:Name="Viewport" Grid.Column="1" Margin="5 0 0 0"
-                                      BorderThickness="1" BorderBrush="LightGray"
-                                      AllowDrop="True" DragOver="Viewport_DragOver" Drop="Viewport_Drop"
-                                      ZoomExtentsWhenLoaded="True" Grid.ColumnSpan="2" Height="500">
+        <HelixToolkit:HelixViewport3D x:Name="Viewport"
+            Grid.Column="2"
+            Margin="5 0 0 0"
+            BorderThickness="1"
+            BorderBrush="LightGray"
+            AllowDrop="True"
+            DragOver="Viewport_DragOver"
+            Drop="Viewport_Drop"
+            ZoomExtentsWhenLoaded="True"
+            Grid.ColumnSpan="2" VerticalContentAlignment="Stretch"
+            >
+
             <!-- Remember to add light to the scene -->
             <HelixToolkit:SunLight/>
             <ModelVisual3D x:Name="Model">
@@ -156,7 +195,13 @@
                     </GeometryModel3D>
                 </ModelVisual3D.Content>
             </ModelVisual3D>
-            <HelixToolkit:GridLinesVisual3D Width="20" Length="20" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
+            <HelixToolkit:GridLinesVisual3D 
+                Width="20"
+                Length="20"
+                MinorDistance="1"
+                MajorDistance="1"
+                Thickness="0.01"
+                />
         </HelixToolkit:HelixViewport3D>
     </Grid>
 </Window>
