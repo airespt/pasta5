@@ -1,5 +1,7 @@
 ﻿using HelixToolkit.Wpf;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq; // For Enumerate Any()
 using System.Windows;
@@ -20,8 +22,12 @@ namespace pasta5 {
 
         private object dummyNode = null; // TreeView
 
+        private Collection<ObjFileItem> objFilesModel = new ObservableCollection<ObjFileItem>(); // lista dos files que aparecem na listBox
+
         public MainWindow() {
             InitializeComponent();
+
+            objList.ItemsSource = objFilesModel;
 
             if( ini.Load() ) {
                 //DumpPath.Text = ini.from;
@@ -73,7 +79,7 @@ namespace pasta5 {
             }
         }
 
-        // on select item change
+        // on tree select item change
         private void FoldersItem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
 
@@ -109,27 +115,41 @@ namespace pasta5 {
             var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh");
 
             // 1 - Search selected folder for a RenderMesh subfolder. If it exists, load all .obj files from it, and it's subfolders.
+            objFilesModel.Clear();
             if (Directory.Exists(renderMeshFolder))
             {
                 
                 // MessageBox.Show("has RenderMesh");
-                /* TODO */
                 var objFiles = Directory.EnumerateFiles(renderMeshFolder, "*.obj", SearchOption.AllDirectories);
-
                 foreach (string currentFile in objFiles)
                 {
                     string fileName = Path.GetFileName(currentFile);
-
-                    
-
+                    objFilesModel.Add(new ObjFileItem { filename = fileName, filepath = currentFile });
                 }
-
             }
 
             // MessageBox.Show(SelectedImagePath);
         }
         /* TreeView - End */
 
+        /*************** obj file List */
+        private void objList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var item = (ObjFileItem)((ListBox)sender)?.SelectedItem;
+            if( item == null )
+                return;
+
+            loadModel(item.filepath);
+        }
+
+        private void objList_KeyDown(object sender, KeyEventArgs e) {
+            var item = (ObjFileItem)((ListBox)sender)?.SelectedItem;
+            if( item == null )
+                return;
+
+            if( e?.Key == Key.Space ) {
+                item.isChecked = !item.isChecked;
+            }
+        }
 
         /************************** ON TEXTBOX PRESS */
         private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs ev)
@@ -151,9 +171,7 @@ namespace pasta5 {
                 }
                 else
                 {
-
                     StatusLog.Clear(); // Remove previous message from status.
-
 
                     // Variables
                     var TargetPathRoot = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider"; // Root folder where all newly created folders exist. Used to check if folder has been created.
@@ -169,7 +187,6 @@ namespace pasta5 {
                     }
                     else
                     {
-
                         // Folder doesn't exist. Continue process;
 
                         // TO ADD HERE: Check if i've exported obj and dds files before creating folders
@@ -182,7 +199,6 @@ namespace pasta5 {
                         var newFolder = Path.Combine(TargetPath.Text, Folder_name.Text); // Created folder to move exported .obj and .dds files to
 
                         var processedFolder = Path.Combine(DumpPath.Text, "[COPIED TO FBX]", Folder_name.Text); // Where to move dumpFolder to, when .objs and .dds are moved to newFolder.
-
 
                         // Create new folders and subfolders
                         var path = Path.Combine(TargetPath.Text, Folder_name.Text);
@@ -261,16 +277,19 @@ namespace pasta5 {
         private void Viewport_Drop(object sender, DragEventArgs e) {
             if( e.Data.GetDataPresent(DataFormats.FileDrop) ) {
                 var objPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                try {
-                    Model3DGroup model1 = modelImporter.Load(objPaths[0]);
-                    Model.Content = model1;
-                }
-                catch( Exception ex ) {
-                    Model.Content = null;
-                    Console.Error.WriteLine(ex.ToString());
-                }
+                loadModel(objPaths[0]);
                 //Focus(); // focus window. Fail
+            }
+        }
+
+        private void loadModel(string path) {
+            try {
+                Model3DGroup model1 = modelImporter.Load(path);
+                Model.Content = model1;
+            }
+            catch( Exception ex ) {
+                Model.Content = null;
+                Console.Error.WriteLine(ex.ToString());
             }
         }
     }

@@ -7,28 +7,29 @@
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="pasta5" MinHeight="500" MinWidth="1000" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" AllowDrop="True" SizeToContent="Height" Height="500" Width="1000" >
+        Title="pasta5" MinHeight="500" MinWidth="1000" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" AllowDrop="True" Height="500" Width="1000" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="361.716" />
-            <ColumnDefinition Width="38.284"/>
-            <ColumnDefinition Width="29*"/>
-            <ColumnDefinition Width="59*"/>
+            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- Left column-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <!-- Save Paths Button -->
@@ -45,7 +46,7 @@
             <!-- Paths grid -->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="70" />
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -54,7 +55,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- DumpFolderPath -->
-                <TextBlock Grid.Row="0" Width="70" VerticalAlignment="Center"
+                <TextBlock Grid.Row="0" VerticalAlignment="Center"
                            FontFamily="Segoe UI Light"
                            Text="Dump Path"
                 />
@@ -75,8 +76,8 @@
 
             <!-- Full Width controls -->
             <StackPanel 
-                Grid.ColumnSpan="2" 
-                Grid.Row="1" 
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
                 Margin="0 10 0 0"
                 >
                 <!-- Folder Name Paste Field -->
@@ -104,86 +105,92 @@
                          Focusable="False"
                          Cursor="Arrow"
                 />
-                
-                <!-- TreeView and OBJView -->
+            </StackPanel>
+            <!-- TreeView and OBJView -->
                 <!-- TODO:
                             - Expand this Grid to 100% height of window;
                             - Add separate mouse wheel scroll only (no window scroll);
                             - Minimum column width because of GridSplitter.
                 -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" SharedSizeGroup="files"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                     <!-- ################## TreeView -->
-                    <TreeView x:Name="foldersItem"
-                        SelectedItemChanged="FoldersItem_SelectedItemChanged"
-                        Width="Auto" 
-                        Background="#FFFFFFFF" 
-                        BorderBrush="#FFFFFFFF" 
-                        Foreground="#FFFFFFFF"
-                        VerticalContentAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        >
-                        <TreeView.Resources>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="HeaderTemplate">
-                                    <Setter.Value>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <!--
-                                                <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
-                                           Source="{Binding 
-                                           RelativeSource={RelativeSource 
-                                           Mode=FindAncestor, 
-                                           AncestorType={x:Type TreeViewItem}}, 
-                                           Path=Header, 
-                                           Converter={x:Static local:HeaderToImageConverter.Instance}}"       
-                                           />
-                                                -->
-                                                <TextBlock Text="{Binding}" Margin="5,0" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </TreeView.Resources>
-                    </TreeView>
+                <TreeView x:Name="foldersItem"
+                          Background="#FFFFFFFF"
+                          BorderBrush="#FFFFFFFF"
+                          Foreground="#FFFFFFFF"
+                          SelectedItemChanged="FoldersItem_SelectedItemChanged"
+                >
+                    <TreeView.Resources>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!--
+                                            <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
+                                        Source="{Binding 
+                                        RelativeSource={RelativeSource 
+                                        Mode=FindAncestor, 
+                                        AncestorType={x:Type TreeViewItem}}, 
+                                        Path=Header, 
+                                        Converter={x:Static local:HeaderToImageConverter.Instance}}"       
+                                        />
+                                            -->
+                                            <TextBlock Text="{Binding}" Margin="5,0" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TreeView.Resources>
+                </TreeView>
 
-                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                     
-                    <!-- ################## OBJView -->
-                    <ListBox x:Name="objList"
-                              Grid.Column="2"
-                              HorizontalContentAlignment="Stretch"
-                              >
-                        <ListBoxItem>obj one</ListBoxItem>
-                        <ListBoxItem>obj two</ListBoxItem>
-                        <ListBoxItem>obj three</ListBoxItem>
-                    </ListBox>
-                    <StackPanel Grid.Column="3" HorizontalAlignment="Right">
-                        <CheckBox />
-                        <CheckBox />
-                        <CheckBox />
-                    </StackPanel>
-                </Grid>
-                <Grid Margin="0,5,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*" />
-                        <ColumnDefinition Width="50*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Button x:Name="btn_discardFolder" Content="Discard Folder" Width="110" Height="44"/>
-                    <Button x:Name="btn_keepFolder" Content="Keep Folder" Grid.Column="1" Width="150"/>
-                </Grid>
-            </StackPanel>
-    </Grid>
+                <!-- ################## OBJView -->
+                <ListBox x:Name="objList"
+                         Grid.Column="2"
+                         HorizontalContentAlignment="Stretch"
+                         PreviewKeyDown="objList_KeyDown"
+                         SelectionChanged="objList_SelectionChanged"
+                         >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0 2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox IsChecked="{Binding isChecked, Mode=TwoWay}" />
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Text="{Binding filename}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            <Grid Margin="0 5 0 0" Grid.Row="3" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*" />
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="btn_discardFolder" Content="Discard Folder" Width="110" Height="44"/>
+                <Button x:Name="btn_keepFolder" Content="Keep Folder" Grid.Column="1" Width="150"/>
+            </Grid>
+        </Grid>
 
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
         <!-- ################## 3D View-->
         <HelixToolkit:HelixViewport3D x:Name="Viewport"
             Grid.Column="2"
@@ -194,7 +201,7 @@
             DragOver="Viewport_DragOver"
             Drop="Viewport_Drop"
             ZoomExtentsWhenLoaded="True"
-            Grid.ColumnSpan="2" VerticalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
             >
 
             <!-- Remember to add light to the scene -->
