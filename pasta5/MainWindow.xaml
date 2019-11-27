@@ -6,7 +6,7 @@
         xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
-        Title="pasta5" MinHeight="70" Width="1000" MinWidth="200" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" ResizeMode="NoResize" Topmost="True" AllowDrop="True" SizeToContent="Height" >
+        Title="pasta5" MinHeight="70" MinWidth="200" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" Topmost="True" AllowDrop="True" SizeToContent="Height" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -95,8 +95,42 @@
                          Focusable="False"
                          Cursor="Arrow"
                 />
+
+                <!-- ################## TreeView -->
+                <TextBlock>yo mof whats up</TextBlock>
+                <TreeView x:Name="foldersItem" SelectedItemChanged="FoldersItem_SelectedItemChanged" Width="Auto" Background="#FFFFFFFF" BorderBrush="#FFFFFFFF" Foreground="#FFFFFFFF" Height="101" VerticalAlignment="Top">
+                    <TreeView.Resources>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!--
+                                            <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
+                                       Source="{Binding 
+                                       RelativeSource={RelativeSource 
+                                       Mode=FindAncestor, 
+                                       AncestorType={x:Type TreeViewItem}}, 
+                                       Path=Header, 
+                                       Converter={x:Static local:HeaderToImageConverter.Instance}}"       
+                                       />
+                                            -->
+                                            <TextBlock Text="{Binding}" Margin="5,0" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TreeView.Resources>
+                </TreeView>
             </StackPanel>
+
+
+
+            
         </Grid>
+
+        <!-- ################## 3D View-->
         <HelixToolkit:HelixViewport3D x:Name="Viewport" Grid.Column="1" Margin="5 0 0 0"
                                       BorderThickness="1" BorderBrush="LightGray"
                                       AllowDrop="True" DragOver="Viewport_DragOver" Drop="Viewport_Drop"

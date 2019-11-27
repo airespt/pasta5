@@ -13,9 +13,12 @@ namespace pasta5 {
     /// </summary>
 
 
-    public partial class MainWindow : Window {
-        public IniSettings ini = new IniSettings();
-        public ModelImporter modelImporter = new ModelImporter();
+    public partial class MainWindow : Window{
+
+        public IniSettings ini = new IniSettings(); // INI
+        public ModelImporter modelImporter = new ModelImporter(); // 3D View
+
+        private object dummyNode = null; // TreeView
 
         public MainWindow() {
             InitializeComponent();
@@ -28,7 +31,82 @@ namespace pasta5 {
             }
         }
 
-        
+        /* TreeView - Start */
+        public string SelectedImagePath { get; set; }
+
+        // on window load, create the tree view with the logical drive letters
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (string s in Directory.GetLogicalDrives())
+            {
+                TreeViewItem item = new TreeViewItem();
+                item.Header = s; // Gets or sets the item that labels the control.
+                item.Tag = s; // Gets or sets an arbitrary object value that can be used to store custom information about this element.
+                item.FontWeight = FontWeights.Normal;
+                item.Items.Add(dummyNode);
+                // item.Expanded += new RoutedEventHandler(Folder_Expanded); // Occurs when the IsExpanded property changes from false to true.
+                foldersItem.Items.Add(item);
+            }
+        }
+
+        // set the "on expand" class
+        void Folder_Expanded(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)sender;
+            if (item.Items.Count == 1 && item.Items[0] == dummyNode)
+            {
+                item.Items.Clear();
+                try
+                {
+                    foreach (string s in Directory.GetDirectories(item.Tag.ToString()))
+                    {
+                        TreeViewItem subitem = new TreeViewItem();
+                        subitem.Header = s.Substring(s.LastIndexOf("\\") + 1);
+                        subitem.Tag = s;
+                        subitem.FontWeight = FontWeights.Normal;
+                        subitem.Items.Add(dummyNode);
+                        subitem.Expanded += new RoutedEventHandler(Folder_Expanded);
+                        item.Items.Add(subitem);
+                    }
+                }
+                catch (Exception) { }
+            }
+        }
+
+        // on select item change
+        private void FoldersItem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            TreeView tree = (TreeView)sender;
+            TreeViewItem temp = ((TreeViewItem)tree.SelectedItem);
+
+            if (temp == null)
+                return;
+            SelectedImagePath = "";
+            string temp1 = "";
+            string temp2 = "";
+            while (true)
+            {
+                temp1 = temp.Header.ToString();
+                if (temp1.Contains(@"\"))
+                {
+                    temp2 = "";
+                }
+                SelectedImagePath = temp1 + temp2 + SelectedImagePath;
+                if (temp.Parent.GetType().Equals(typeof(TreeView)))
+                {
+                    break;
+                }
+                temp = ((TreeViewItem)temp.Parent);
+                temp2 = @"\";
+            }
+            //show user selected path
+            MessageBox.Show(SelectedImagePath);
+        }
+
+
+        /* TreeView - End */
+
+
         /************************** ON TEXTBOX PRESS */
         private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs ev)
         {
