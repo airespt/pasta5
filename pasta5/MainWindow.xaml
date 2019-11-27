@@ -115,7 +115,8 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <!-- ################## TreeView -->
                     <TreeView x:Name="foldersItem"
@@ -155,16 +156,33 @@
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                     
                     <!-- ################## OBJView -->
-                    <TreeView x:Name="objListTreeView"
+                    <ListBox x:Name="objList"
                               Grid.Column="2"
                               HorizontalContentAlignment="Stretch"
                               >
-                        <TreeViewItem Header="hello"/>
-                    </TreeView>
+                        <ListBoxItem>obj one</ListBoxItem>
+                        <ListBoxItem>obj two</ListBoxItem>
+                        <ListBoxItem>obj three</ListBoxItem>
+                    </ListBox>
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Right">
+                        <CheckBox />
+                        <CheckBox />
+                        <CheckBox />
+                    </StackPanel>
                 </Grid>
-                
+                <Grid Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*" />
+                        <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Button x:Name="btn_discardFolder" Content="Discard Folder" Width="110" Height="44"/>
+                    <Button x:Name="btn_keepFolder" Content="Keep Folder" Grid.Column="1" Width="150"/>
+                </Grid>
             </StackPanel>
-        </Grid>
+    </Grid>
 
         <!-- ################## 3D View-->
         <HelixToolkit:HelixViewport3D x:Name="Viewport"

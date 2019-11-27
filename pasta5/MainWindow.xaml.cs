@@ -111,17 +111,19 @@ namespace pasta5 {
             // 1 - Search selected folder for a RenderMesh subfolder. If it exists, load all .obj files from it, and it's subfolders.
             if (Directory.Exists(renderMeshFolder))
             {
-                MessageBox.Show("has RenderMesh");
-                /* TODO
+                
+                // MessageBox.Show("has RenderMesh");
+                /* TODO */
                 var objFiles = Directory.EnumerateFiles(renderMeshFolder, "*.obj", SearchOption.AllDirectories);
 
                 foreach (string currentFile in objFiles)
                 {
                     string fileName = Path.GetFileName(currentFile);
 
+                    
 
                 }
-                */
+
             }
 
             // MessageBox.Show(SelectedImagePath);
