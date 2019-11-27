@@ -44,7 +44,7 @@ namespace pasta5 {
                 item.Tag = s; // Gets or sets an arbitrary object value that can be used to store custom information about this element.
                 item.FontWeight = FontWeights.Normal;
                 item.Items.Add(dummyNode);
-                // item.Expanded += new RoutedEventHandler(Folder_Expanded); // Occurs when the IsExpanded property changes from false to true.
+                item.Expanded += new RoutedEventHandler(Folder_Expanded); // Occurs when the IsExpanded property changes from false to true.
                 foldersItem.Items.Add(item);
             }
         }

@@ -6,6 +6,7 @@
         xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="pasta5" MinHeight="70" MinWidth="200" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" Topmost="True" AllowDrop="True" SizeToContent="Height" >
 
     <Grid Margin="10">
@@ -97,8 +98,7 @@
                 />
 
                 <!-- ################## TreeView -->
-                <TextBlock>yo mof whats up</TextBlock>
-                <TreeView x:Name="foldersItem" SelectedItemChanged="FoldersItem_SelectedItemChanged" Width="Auto" Background="#FFFFFFFF" BorderBrush="#FFFFFFFF" Foreground="#FFFFFFFF" Height="101" VerticalAlignment="Top">
+                <TreeView x:Name="foldersItem" SelectedItemChanged="FoldersItem_SelectedItemChanged" Width="Auto" Background="#FFFFFFFF" BorderBrush="#FFFFFFFF" Foreground="#FFFFFFFF">
                     <TreeView.Resources>
                         <Style TargetType="{x:Type TreeViewItem}">
                             <Setter Property="HeaderTemplate">
