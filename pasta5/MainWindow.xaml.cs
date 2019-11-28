@@ -119,6 +119,14 @@ namespace pasta5 {
                     string fileName = Path.GetFileName(currentFile);
                     objFilesModel.Add(new ObjFileItem { filename = fileName, filepath = currentFile });
                 }
+
+                // Auto-load first model of TreeView selected folder, if any exists.
+                if (objFilesModel.Any())
+                {
+                    loadModel(objFilesModel.First().filepath);
+                } else {
+                    objFilesModel.Clear();
+                }
             }
         }
 
