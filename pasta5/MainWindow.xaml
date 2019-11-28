@@ -7,11 +7,11 @@
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="pasta5" MinHeight="500" MinWidth="1000" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" AllowDrop="True" Height="500" Width="1000" >
+        Title="pasta5" MinHeight="300" MinWidth="640" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" AllowDrop="True" Height="500" Width="1024" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width=".5*" />
             <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -80,17 +80,6 @@
                 Grid.ColumnSpan="2"
                 Margin="0 10 0 0"
                 >
-                <!-- Folder Name Paste Field -->
-                <TextBox x:Name="Folder_name"
-                         Text=""
-                         Height="50"
-                         TextAlignment="Center"
-                         FontSize="26" FontFamily="Segoe UI Semibold"
-                         Cursor="Arrow"
-                         PreviewMouseLeftButtonUp="Folder_name_MouseLeftButtonUp"
-                         TextChanged="Folder_name_TextChanged"
-                         IsTabStop="False" BorderThickness="1" BorderBrush="#FFE2E2E2" TextOptions.TextFormattingMode="Display"
-                />
 
                 <!-- Process Files and Folders Button -->
                 <TextBox x:Name="StatusLog"
@@ -185,8 +174,14 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="btn_discardFolder" Content="Discard Folder" Width="110" Height="44"/>
-                <Button x:Name="btn_keepFolder" Content="Keep Folder" Grid.Column="1" Width="150"/>
+                <Button x:Name="btn_discardFolder"
+                        Content="Discard Folder"
+                        Width="110" Height="44" Click="btn_discardFolder_Click"
+                        />
+                <Button x:Name="btn_keepFolder"
+                        Content="Keep Folder"
+                        Grid.Column="1"
+                        Width="150" Click="btn_keepFolder_Click"/>
             </Grid>
         </Grid>
 
