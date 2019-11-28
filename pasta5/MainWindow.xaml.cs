@@ -37,10 +37,10 @@ namespace pasta5 {
             }
         }
 
-        /* TreeView - Start */
+        // TreeView - Start
         public string SelectedImagePath { get; set; }
 
-        // Create the tree view with the logical drive letters - this gets called through Window.Loaded
+        /************************** TreeView - Load (through Window.Loaded) */
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             foreach (string s in Directory.GetLogicalDrives())
@@ -55,7 +55,7 @@ namespace pasta5 {
             }
         }
 
-        // "on expand" class
+        /************************** TreeView "On Expand" */
         void Folder_Expanded(object sender, RoutedEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)sender;
@@ -79,13 +79,10 @@ namespace pasta5 {
             }
         }
 
-        // on tree select item change
+        /************************** TreeView Folder "On Select" */
         private void FoldersItem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
-            // Variables
-            // var renderMeshFolder;
-
+            /* Build Sub-Folder  */
             TreeView tree = (TreeView)sender;
             TreeViewItem temp = ((TreeViewItem)tree.SelectedItem);
 
@@ -110,16 +107,12 @@ namespace pasta5 {
                 temp2 = @"\";
             }
 
-            /* Load obj list */
-            // Folder to search for obj files in.
-            var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh");
-
-            // 1 - Search selected folder for a RenderMesh subfolder. If it exists, load all .obj files from it, and it's subfolders.
+            /* Load OBS List */
+            /* Searches selected TreeView folder for a RenderMesh subfolder. If it exists, load all .OBJs from it, and it's subfolders. */
+            var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh"); // Folder to search for .OBJs in.
             objFilesModel.Clear();
             if (Directory.Exists(renderMeshFolder))
             {
-                
-                // MessageBox.Show("has RenderMesh");
                 var objFiles = Directory.EnumerateFiles(renderMeshFolder, "*.obj", SearchOption.AllDirectories);
                 foreach (string currentFile in objFiles)
                 {
@@ -127,12 +120,9 @@ namespace pasta5 {
                     objFilesModel.Add(new ObjFileItem { filename = fileName, filepath = currentFile });
                 }
             }
-
-            // MessageBox.Show(SelectedImagePath);
         }
-        /* TreeView - End */
 
-        /*************** obj file List */
+        /************************** OBJ File List */
         private void objList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var item = (ObjFileItem)((ListBox)sender)?.SelectedItem;
             if( item == null )
@@ -151,106 +141,95 @@ namespace pasta5 {
             }
         }
 
-        /************************** ON TEXTBOX PRESS */
-        private void Folder_name_MouseLeftButtonUp(object sender, MouseButtonEventArgs ev)
+        /************************** Button - Keep */
+        private void btn_keepFolder_Click(object sender, RoutedEventArgs e)
         {
-            Folder_name.SelectAll(); // Select all, readying for next "paste".
-            StatusLog.Clear(); // Remove message from status.
-        }
+            StatusLog.Text = "";
 
+            // Variables
+            var TargetPathRoot = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider"; // Root folder where all newly created folders exist. Used to check if folder exists in any subfolder.
+            var targetPath = Path.Combine(TargetPathRoot, "[MASS UNPACK]"); // Folder where all new created folder will go to.
+            var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
 
-        /************************** ON TEXTBOX PASTE */
-        private void Folder_name_TextChanged(object sender, TextChangedEventArgs ev)
-        {
-            try {
+            var processedFolder = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[COPIED TO FBX]", currentFolder); // Where to move the currentFolder to, when .objs and .dds are moved to newFolder.
 
-                // Check for empty "paste TextBox", or whitespace input
-                if (String.IsNullOrEmpty(Folder_name.Text))
+            // * Check if newFolder has already been created.
+            var dirs = Directory.EnumerateDirectories(TargetPathRoot, currentFolder, SearchOption.AllDirectories);
+            if (dirs.Any())
+            {
+                StatusLog.Text = "Folder already exists!";
+            }
+            else
+            {
+                // * Check if any OBJs are selected. Else, can't create newFolder.
+                var checkedItems = objFilesModel.Where(x => x.isChecked);
+                if (checkedItems.Count() == 0)
                 {
-                    StatusLog.Text = "Invalid folder name";
+                    StatusLog.Text = "No OBJs are selected!";
                 }
                 else
                 {
-                    StatusLog.Clear(); // Remove previous message from status.
+                   // * Create newFolder, with textures sub-folder.
+                   var newFolder = Path.Combine(targetPath, currentFolder);
+                   Directory.CreateDirectory(newFolder);
+                   var textureFolder = Path.Combine(targetPath, currentFolder, "textures");
+                   Directory.CreateDirectory(textureFolder);
 
-                    // Variables
-                    var TargetPathRoot = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider"; // Root folder where all newly created folders exist. Used to check if folder has been created.
-
-                    // btn_move_obj_dds.IsEnabled = true; // Re-enable MF&F button, case it was disabled when duplicated folder name was found.
-
-                    // Check If To-Be-Created Folder Has Already Been Created
-                    var dirs = Directory.EnumerateDirectories(TargetPathRoot, Folder_name.Text, SearchOption.AllDirectories);
-                    if (dirs.Any()) // Folder has already been created! Halt process!
+                    // * Move selected .OBJs to newFolder.
+                    foreach (ObjFileItem item in checkedItems)
                     {
-                        StatusLog.Text = "Folder already exists.";
-                        // btn_move_obj_dds.IsEnabled = false; // Disable button, as a visual clue, and not to re-copy files accidentaly.
+                        Directory.Move(item.filepath, Path.Combine(newFolder, item.filename));
                     }
-                    else
+                    
+                    // Move .DDSs to newFolder\textures.
+                    var ddsFiles = Directory.EnumerateFiles(SelectedImagePath, "*.dds", SearchOption.AllDirectories);
+
+                    foreach (string ddsFile in ddsFiles)
                     {
-                        // Folder doesn't exist. Continue process;
-
-                        // TO ADD HERE: Check if i've exported obj and dds files before creating folders
-
-                        // Variables 
-                        var dumpFolder = Path.Combine(DumpPath.Text, Folder_name.Text); // Dump folder created when dumping .drm file with DRMDumper. Folder name used to create new folder
-                        var objDumpFolder = Path.Combine(dumpFolder, "RenderMesh"); // Folder where exported .obj files are
-                        var ddsDumpFolder = Path.Combine(dumpFolder, "Texture"); // Folder where exported .dds files are
-
-                        var newFolder = Path.Combine(TargetPath.Text, Folder_name.Text); // Created folder to move exported .obj and .dds files to
-
-                        var processedFolder = Path.Combine(DumpPath.Text, "[COPIED TO FBX]", Folder_name.Text); // Where to move dumpFolder to, when .objs and .dds are moved to newFolder.
-
-                        // Create new folders and subfolders
-                        var path = Path.Combine(TargetPath.Text, Folder_name.Text);
-                        Directory.CreateDirectory(path); // Create new folder.
-
-                        var tex = Path.Combine(path, "textures");
-                        Directory.CreateDirectory(tex); // Create "textures" sub-folder.
-
-                        StatusLog.Text = "Folders created."; // Success
-
-                        // Move all .OBJ files to newFolder
-                        string sourceOBJDirectory = objDumpFolder;
-                        string archiveOBJDirectory = newFolder;
-
-                        var objFiles = Directory.EnumerateFiles(sourceOBJDirectory, "*.obj", SearchOption.AllDirectories);
-
-                        foreach (string currentFile in objFiles)
-                        {
-                            string fileName = Path.GetFileName(currentFile);
-                            Directory.Move(currentFile, Path.Combine(archiveOBJDirectory, fileName));
-                        }
-
-
-                        // And all .DDS files to newFolder as well.
-                        string sourceDDSDirectory = ddsDumpFolder;
-                        string archiveDDSDirectory = Path.Combine(newFolder, "textures");
-
-                        var ddsFiles = Directory.EnumerateFiles(sourceDDSDirectory, "*.dds", SearchOption.AllDirectories);
-
-                        foreach (string currentFile in ddsFiles)
-                        {
-                            string fileName = Path.GetFileName(currentFile);
-                            Directory.Move(currentFile, Path.Combine(archiveDDSDirectory, fileName));
-                        }
-
-                        // Console.Error.WriteLine(dumpFolder);
-                        // Console.Error.WriteLine(processedFolder);
-
-                        // When files are moved, move dumpFolder to processedFolder.
-                        Directory.Move(dumpFolder, processedFolder);
-
-                        StatusLog.Text = "Done."; // Success
-
-
+                        string ddsFileName = Path.GetFileName(ddsFile);
+                        Directory.Move(ddsFile, Path.Combine(newFolder, "textures", ddsFileName));
                     }
+
+                    // * When moved .OBJs and .DDSs, move currentFolder to processedFolder.
+                    Directory.Move(SelectedImagePath, processedFolder);
+
+                    StatusLog.Text = "New folder & files created.";
+
                 }
             }
-            catch( Exception ex ) {
-                Console.Error.WriteLine(ex.ToString());
-            }
-        }
+         }
 
+        /************************** Button - Discard */
+        private void btn_discardFolder_Click(object sender, RoutedEventArgs e)
+        {
+            StatusLog.Text = "";
+
+            /* Discarding a folder will move it to a storage folder; i might want to come back to it and see if i'm interested in using the OBJs in side that folder.
+             * This action will be deleting all DDSs inside the folder, to save some HDD space.
+             */
+
+            // Variables
+            var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
+            var discardedFolderPath = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[NOT INTERESTED]", currentFolder); // Where to move the currentFolder to if i discard it.
+
+            // * Delete DDSs first.
+            var texturesFolder = Path.Combine(SelectedImagePath, "Texture"); // Where all DDSs are.
+            var ddsFiles = Directory.EnumerateFiles(texturesFolder, "*.dds", SearchOption.AllDirectories); // Delete DDSs separately, in case some have no containing folder.
+            foreach (string ddsFile in ddsFiles)
+            {
+                File.Delete(ddsFile);
+            }
+            List<string> ddsDirs = new List<string>(Directory.EnumerateDirectories(texturesFolder));
+            foreach (var ddsDir in ddsDirs)
+            {
+                Directory.Delete(ddsDir, true);
+            }
+
+            // * Move discarded folder to storage.
+            Directory.Move(SelectedImagePath, discardedFolderPath);
+
+            StatusLog.Text = "DDSs deleted & folder discarded.";
+        }
 
         /************************** Save Paths Button */
         private void Btn_save_paths_Click(object sender, RoutedEventArgs e)
@@ -259,7 +238,6 @@ namespace pasta5 {
             // ini.to = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider\[MASS UNPACK]";
             // ini.Save();
         }
-
 
         /************************** 3D Preview */
         private void Viewport_DragOver(object sender, DragEventArgs e) {
@@ -286,11 +264,13 @@ namespace pasta5 {
             try {
                 Model3DGroup model1 = modelImporter.Load(path);
                 Model.Content = model1;
+                Viewport.ZoomExtents();
             }
             catch( Exception ex ) {
                 Model.Content = null;
                 Console.Error.WriteLine(ex.ToString());
             }
         }
+
     }
 }
