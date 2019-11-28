@@ -129,6 +129,7 @@ namespace pasta5 {
                     } else
                     {
                         objList.SelectedIndex = 0;
+                        // objList.Focus(); // Focus() here not working well; Moving up the TreeView, will not select SelectedIndex = 0
                     }
                 } else {
                     objFilesModel.Clear();
@@ -139,9 +140,11 @@ namespace pasta5 {
         /************************** OBJ File List */
         private void objList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var item = (ObjFileItem)((ListBox)sender)?.SelectedItem;
-            if( item == null )
+            if (item == null)
+            {
                 return;
-
+            }
+            StatusLog.Text = foldersItem.SelectedItem.ToString();
             loadModel(item.filepath);
         }
 
@@ -216,6 +219,10 @@ namespace pasta5 {
         /************************** Button - Discard */
         private void btn_discardFolder_Click(object sender, RoutedEventArgs e)
         {
+            // Update TreeView with a windows_load maybe
+            // and select next folder, from the one that's deleted.
+           // var nextTreeViewFolder; // Next folder in the the TreeView, after currentFolder. We use this to auto-select the next folder in line, when discarding (and removing - from the TreeView) the currentFolder.
+
             StatusLog.Text = "";
 
             /* Discarding a folder will move it to a storage folder; i might want to come back to it and see if i'm interested in using the OBJs in side that folder.
