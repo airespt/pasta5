@@ -108,7 +108,7 @@ namespace pasta5 {
             }
 
             /* Load OBS List */
-            /* Searches selected TreeView folder for a RenderMesh subfolder. If it exists, load all .OBJs from it, and it's subfolders. */
+            /* Searches selected TreeView  sfolder for a RenderMesh subfolder. If it exists, load all .OBJs from it, and it's subfolders. */
             var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh"); // Folder to search for .OBJs in.
             objFilesModel.Clear();
             if (Directory.Exists(renderMeshFolder))
