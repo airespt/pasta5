@@ -143,7 +143,7 @@
                     </TreeView.Resources>
                 </TreeView>
 
-                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" IsTabStop="False" />
                     
                 <!-- ################## OBJView -->
                 <ListBox x:Name="objList"

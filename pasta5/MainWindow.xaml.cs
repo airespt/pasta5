@@ -120,10 +120,16 @@ namespace pasta5 {
                     objFilesModel.Add(new ObjFileItem { filename = fileName, filepath = currentFile });
                 }
 
-                // Auto-load first model of TreeView selected folder, if any exists.
+                // Auto-load first model of TreeView selected folder, if any exists. Else, clear list for visual hint.
                 if (objFilesModel.Any())
                 {
-                    loadModel(objFilesModel.First().filepath);
+                    if (objFilesModel.Count() == 1)
+                    {
+                        loadModel(objFilesModel.First().filepath);
+                    } else
+                    {
+                        objList.SelectedIndex = 0;
+                    }
                 } else {
                     objFilesModel.Clear();
                 }
