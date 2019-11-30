@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq; // For Enumerate Any()
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,20 +15,16 @@ namespace pasta5 {
     /// </summary>
 
 
-    public partial class MainWindow : Window{
+    public partial class MainWindow : Window {
 
-        public IniSettings ini = new IniSettings(); // INI
-        public ModelImporter modelImporter = new ModelImporter(); // 3D View
-
+        public IniSettings ini = new IniSettings();
+        public ModelImporter modelImporter = new ModelImporter();
         private object dummyNode = null; // TreeView
-
-        private Collection<ObjFileItem> objFilesModel = new ObservableCollection<ObjFileItem>(); // lista dos files que aparecem na listBox
+        private Collection<ObjFileItem> objFilesModel = new ObservableCollection<ObjFileItem>(); // OBJ list in ListBox
 
         public MainWindow() {
             InitializeComponent();
-
             objList.ItemsSource = objFilesModel;
-
             if( ini.Load() ) {
                 //DumpPath.Text = ini.from;
                 // TargetPath.Text = ini.to;
@@ -37,16 +33,15 @@ namespace pasta5 {
             }
         }
 
-        // TreeView - Start
+        /************************** TreeView (initially loaded through Window.Loaded) */
         public string SelectedImagePath { get; set; }
 
-        /************************** TreeView - Load (through Window.Loaded) */
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             foreach (string s in Directory.GetLogicalDrives())
             {
-                TreeViewItem item = new TreeViewItem();
-                item.Header = s; // Gets or sets the item that labels the control.
+                TreeViewItem item = new TreeViewItem(); // TreeViewItem class instanciation.
+                item.Header = s; // Gets or sets the label of the item.
                 item.Tag = s; // Gets or sets an arbitrary object value that can be used to store custom information about this element.
                 item.FontWeight = FontWeights.Normal;
                 item.Items.Add(dummyNode);
@@ -211,7 +206,6 @@ namespace pasta5 {
                     Directory.Move(SelectedImagePath, processedFolder);
 
                     StatusLog.Text = "New folder & files created.";
-
                 }
             }
          }
@@ -219,37 +213,61 @@ namespace pasta5 {
         /************************** Button - Discard */
         private void btn_discardFolder_Click(object sender, RoutedEventArgs e)
         {
-            // Update TreeView with a windows_load maybe
-            // and select next folder, from the one that's deleted.
-           // var nextTreeViewFolder; // Next folder in the the TreeView, after currentFolder. We use this to auto-select the next folder in line, when discarding (and removing - from the TreeView) the currentFolder.
-
-            StatusLog.Text = "";
-
-            /* Discarding a folder will move it to a storage folder; i might want to come back to it and see if i'm interested in using the OBJs in side that folder.
-             * This action will be deleting all DDSs inside the folder, to save some HDD space.
+            /* TODO:
+             * See if TreeViewItem's indexes changes when amount of TreeViewItems diminuishes in TreeView.
+             * If so, when removing TreeViewItem, get it's index and auto select the same index item (it will be the next folder in the list)
+             * 
              */
 
-            // Variables
-            var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
-            var discardedFolderPath = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[NOT INTERESTED]", currentFolder); // Where to move the currentFolder to if i discard it.
+            TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
+            TreeViewItem parentItem = (selectedItem.Parent as TreeViewItem);
+            // (ParentItem.Items[ParentItem.Items.Count + 1] as TreeViewItem).IsSelected = true;
 
-            // * Delete DDSs first.
-            var texturesFolder = Path.Combine(SelectedImagePath, "Texture"); // Where all DDSs are.
-            var ddsFiles = Directory.EnumerateFiles(texturesFolder, "*.dds", SearchOption.AllDirectories); // Delete DDSs separately, in case some have no containing folder.
-            foreach (string ddsFile in ddsFiles)
+            string nChildren = parentItem.Items.Count.ToString(); // item count in selectedItem's parent
+            int selectedIndex = parentItem.Items.IndexOf(selectedItem); // selected TreeViewItem index
+
+            parentItem.Items.Remove(selectedItem);
+            
+
+            TreeViewItem tvi = foldersItem.ItemContainerGenerator.ContainerFromItem(selectedItem) as TreeViewItem;
+            if (tvi != null)
             {
-                File.Delete(ddsFile);
-            }
-            List<string> ddsDirs = new List<string>(Directory.EnumerateDirectories(texturesFolder));
-            foreach (var ddsDir in ddsDirs)
-            {
-                Directory.Delete(ddsDir, true);
+                tvi.IsSelected = true;
             }
 
-            // * Move discarded folder to storage.
-            Directory.Move(SelectedImagePath, discardedFolderPath);
+            // StatusLog.Text = nChildren;
+            StatusLog.Text = selectedIndex.ToString();
 
-            StatusLog.Text = "DDSs deleted & folder discarded.";
+            /*
+            StatusLog.Text = "";
+
+            /* 
+             * Discarding a folder will move it to a storage folder; i might want to come back to it and see if i'm interested in using the OBJs inside that folder.
+             * Here, we will be deleting all DDSs inside the folder, to save some HDD space, before discarding the folder.
+             */
+             /*
+           // Variables
+           var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
+           var discardedFolderPath = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[NOT INTERESTED]", currentFolder); // Where to move the currentFolder to if i discard it.
+
+           // * Delete DDSs first.
+           var texturesFolder = Path.Combine(SelectedImagePath, "Texture"); // Where all DDSs are.
+           var ddsFiles = Directory.EnumerateFiles(texturesFolder, "*.dds", SearchOption.AllDirectories); // Delete DDSs separately, in case some have no containing folder.
+           foreach (string ddsFile in ddsFiles)
+           {
+               File.Delete(ddsFile);
+           }
+           List<string> ddsDirs = new List<string>(Directory.EnumerateDirectories(texturesFolder));
+           foreach (var ddsDir in ddsDirs)
+           {
+               Directory.Delete(ddsDir, true);
+           }
+
+           // * Move discarded folder to storage.
+           Directory.Move(SelectedImagePath, discardedFolderPath);
+
+           StatusLog.Text = "DDSs deleted & folder discarded.";
+           */
         }
 
         /************************** Save Paths Button */
@@ -294,4 +312,8 @@ namespace pasta5 {
         }
 
     }
+
+    
+
+
 }

@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:pasta5"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="pasta5" MinHeight="300" MinWidth="640" FontSize="12" FontFamily="Arial" Background="#FFF0F0F0" AllowDrop="True" Height="500" Width="1024" >
+        Title="pasta5" MinHeight="300" MinWidth="640" FontSize="12" FontFamily="Arial"
+        Background="#FFF0F0F0" AllowDrop="True" Height="500" Width="1024" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
