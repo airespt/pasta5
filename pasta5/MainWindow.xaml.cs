@@ -213,81 +213,62 @@ namespace pasta5 {
         /************************** Button - Discard */
         private void btn_discardFolder_Click(object sender, RoutedEventArgs e)
         {
-            /* TODO:
-             * See if TreeViewItem's indexes changes when amount of TreeViewItems diminuishes in TreeView.
-             * If so, when removing TreeViewItem, get it's index and auto select the same index item (it will be the next folder in the list)
-             * 
-             */
-
             TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
             TreeViewItem parentItem = (selectedItem.Parent as TreeViewItem);
-            // (ParentItem.Items[ParentItem.Items.Count + 1] as TreeViewItem).IsSelected = true;
+            string allowedFolder = "[MASS UNPACK - go through these in Noesis]"; // Set allowed folder to run the discard button.
 
-            string nChildren = parentItem.Items.Count.ToString(); // item count in selectedItem's parent's children
-            int selectedIndex = parentItem.Items.IndexOf(selectedItem); // selected TreeViewItem index
-            
-            
+            if (parentItem.Header.ToString() == allowedFolder)
+            { 
+                /* Discarding a folder will move it to a storage folder; i might want to come back to it later
+                    * and see if i'm interested in using the OBJs inside it.
+                    * We'll also be deleting all DDSs inside the folder, to save some HDD space, before discarding the folder.
+                */
 
-            /*
-            if (parentItem.Items.Count == ++selectedIndex)
-            {
-                // If selected folder to delete is the last one of it's parent treeview, auto select the previous folder.
-                MessageBox.Show("you're deleting the last folder. auto select previous index");
-                // int selectThisIndex = --selectedIndex;
+                // Variables
+                var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
+                var discardedFolderPath = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[NOT INTERESTED]", currentFolder); // Where to move the currentFolder to if i discard it.
+
+                // * Delete DDSs first.
+                var texturesFolder = Path.Combine(SelectedImagePath, "Texture"); // Where all DDSs are.
+                var ddsFiles = Directory.EnumerateFiles(texturesFolder, "*.dds", SearchOption.AllDirectories); // Delete DDSs separately, in case some have no containing folder.
+                foreach (string ddsFile in ddsFiles)
+                {
+                    File.Delete(ddsFile);
+                }
+                List<string> ddsDirs = new List<string>(Directory.EnumerateDirectories(texturesFolder));
+                foreach (var ddsDir in ddsDirs)
+                {
+                    Directory.Delete(ddsDir, true);
+                }
+
+                // * Move discarded folder to storage.
+                Directory.Move(SelectedImagePath, discardedFolderPath);
+
+
+                // * Start tree folder auto-select, on discard.
+                int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
+                
+                /* When deleting folders in the Tree, top-to-bottom, the next folder auto-gets this index,
+                 * so we can easily auto-select the next folder (will have the same index) without changing any values.
+                 * Only when deleting bottom-to-top do we decrement the index.
+                 * */
+                int selectedIndex = parentItem.Items.IndexOf(selectedItem); 
+
+                parentItem.Items.Remove(selectedItem); // Remove folder from tree.
+                if (nChildren > 1) { // If folders still exist, auto-select.
+                    if (selectedIndex == nChildren - 1) // If last folder is selected.
+                    {
+                        selectedIndex = --selectedIndex; // Discarding from last folder to top folder, we need to decrease the index.
+                    }
+                        ((TreeViewItem)parentItem.Items[selectedIndex]).IsSelected= true;
+                        ((TreeViewItem)parentItem.Items[selectedIndex]).Focus();
+                }
+                /* End tree folder auto-select, on discard. */
             }
             else
             {
-                // If there's more folder below the selected folder, select the next folder.
-                MessageBox.Show("this ain't the last folder in the tv. auto select next index.");
-                // int selectThisIndex = ++selectedIndex;
+                MessageBox.Show("You can only proccess folders inside a specific folder.");
             }
-            */
-           //  parentItem.Items.Remove(selectedItem);
-            
-
-            /* SELECT NEXT ITEM */
-            
-
-            TreeViewItem tvi = foldersItem.ItemContainerGenerator.ContainerFromItem(selectedItem) as TreeViewItem;
-            
-            if (tvi != null)
-            {
-                tvi.IsSelected = true;
-            }
-            
-            // StatusLog.Text = nChildren;
-            // StatusLog.Text = nChildren.ToString();
-            // MessageBox.Show(selectedIndex.ToString());
-            /*
-            StatusLog.Text = "";
-
-            /* 
-             * Discarding a folder will move it to a storage folder; i might want to come back to it and see if i'm interested in using the OBJs inside that folder.
-             * Here, we will be deleting all DDSs inside the folder, to save some HDD space, before discarding the folder.
-             */
-             /*
-           // Variables
-           var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
-           var discardedFolderPath = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[NOT INTERESTED]", currentFolder); // Where to move the currentFolder to if i discard it.
-
-           // * Delete DDSs first.
-           var texturesFolder = Path.Combine(SelectedImagePath, "Texture"); // Where all DDSs are.
-           var ddsFiles = Directory.EnumerateFiles(texturesFolder, "*.dds", SearchOption.AllDirectories); // Delete DDSs separately, in case some have no containing folder.
-           foreach (string ddsFile in ddsFiles)
-           {
-               File.Delete(ddsFile);
-           }
-           List<string> ddsDirs = new List<string>(Directory.EnumerateDirectories(texturesFolder));
-           foreach (var ddsDir in ddsDirs)
-           {
-               Directory.Delete(ddsDir, true);
-           }
-
-           // * Move discarded folder to storage.
-           Directory.Move(SelectedImagePath, discardedFolderPath);
-
-           StatusLog.Text = "DDSs deleted & folder discarded.";
-           */
         }
 
         /************************** Save Paths Button */
