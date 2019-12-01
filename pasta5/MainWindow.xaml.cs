@@ -156,59 +156,91 @@ namespace pasta5 {
         /************************** Button - Keep */
         private void btn_keepFolder_Click(object sender, RoutedEventArgs e)
         {
-            StatusLog.Text = "";
+            TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
+            TreeViewItem parentItem = (selectedItem.Parent as TreeViewItem);
+            string allowedFolder = "[MASS UNPACK - go through these in Noesis]"; // Set allowed folder to run the discard button.
 
-            // Variables
-            var TargetPathRoot = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider"; // Root folder where all newly created folders exist. Used to check if folder exists in any subfolder.
-            var targetPath = Path.Combine(TargetPathRoot, "[MASS UNPACK]"); // Folder where all new created folder will go to.
-            var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
-
-            var processedFolder = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[COPIED TO FBX]", currentFolder); // Where to move the currentFolder to, when .objs and .dds are moved to newFolder.
-
-            // * Check if newFolder has already been created.
-            var dirs = Directory.EnumerateDirectories(TargetPathRoot, currentFolder, SearchOption.AllDirectories);
-            if (dirs.Any())
+            if (parentItem.Header.ToString() == allowedFolder)
             {
-                StatusLog.Text = "Folder already exists!";
-            }
-            else
-            {
-                // * Check if any OBJs are selected. Else, can't create newFolder.
-                var checkedItems = objFilesModel.Where(x => x.isChecked);
-                if (checkedItems.Count() == 0)
+                StatusLog.Text = "";
+
+                // Variables
+                var TargetPathRoot = @"S:\Dying Light Dev Stuff\FBX\Rise of the Tomb Raider"; // Root folder where all newly created folders exist. Used to check if folder exists in any subfolder.
+                var targetPath = Path.Combine(TargetPathRoot, "[MASS UNPACK]"); // Folder where all new created folder will go to.
+                var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
+
+                var processedFolder = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[COPIED TO FBX]", currentFolder); // Where to move the currentFolder to, when .objs and .dds are moved to newFolder.
+
+                // * Check if newFolder has already been created.
+                var dirs = Directory.EnumerateDirectories(TargetPathRoot, currentFolder, SearchOption.AllDirectories);
+                if (dirs.Any())
                 {
-                    StatusLog.Text = "No OBJs are selected!";
+                    StatusLog.Text = "Folder already exists!";
                 }
                 else
                 {
-                   // * Create newFolder, with textures sub-folder.
-                   var newFolder = Path.Combine(targetPath, currentFolder);
-                   Directory.CreateDirectory(newFolder);
-                   var textureFolder = Path.Combine(targetPath, currentFolder, "textures");
-                   Directory.CreateDirectory(textureFolder);
-
-                    // * Move selected .OBJs to newFolder.
-                    foreach (ObjFileItem item in checkedItems)
+                    // * Check if any OBJs are selected. Else, can't create newFolder.
+                    var checkedItems = objFilesModel.Where(x => x.isChecked);
+                    if (checkedItems.Count() == 0)
                     {
-                        Directory.Move(item.filepath, Path.Combine(newFolder, item.filename));
+                        StatusLog.Text = "No OBJs are selected!";
                     }
-                    
-                    // Move .DDSs to newFolder\textures.
-                    var ddsFiles = Directory.EnumerateFiles(SelectedImagePath, "*.dds", SearchOption.AllDirectories);
-
-                    foreach (string ddsFile in ddsFiles)
+                    else
                     {
-                        string ddsFileName = Path.GetFileName(ddsFile);
-                        Directory.Move(ddsFile, Path.Combine(newFolder, "textures", ddsFileName));
+                        // * Create newFolder, with textures sub-folder.
+                        var newFolder = Path.Combine(targetPath, currentFolder);
+                        Directory.CreateDirectory(newFolder);
+                        var textureFolder = Path.Combine(targetPath, currentFolder, "textures");
+                        Directory.CreateDirectory(textureFolder);
+
+                        // * Move selected .OBJs to newFolder.
+                        foreach (ObjFileItem item in checkedItems)
+                        {
+                            Directory.Move(item.filepath, Path.Combine(newFolder, item.filename));
+                        }
+
+                        // Move .DDSs to newFolder\textures.
+                        var ddsFiles = Directory.EnumerateFiles(SelectedImagePath, "*.dds", SearchOption.AllDirectories);
+
+                        foreach (string ddsFile in ddsFiles)
+                        {
+                            string ddsFileName = Path.GetFileName(ddsFile);
+                            Directory.Move(ddsFile, Path.Combine(newFolder, "textures", ddsFileName));
+                        }
+
+                        // * When moved .OBJs and .DDSs, move currentFolder to processedFolder.
+                        Directory.Move(SelectedImagePath, processedFolder);
+
+                        // * Start tree folder auto-select, on discard.
+                        int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
+
+                        /* When deleting folders in the Tree, top-to-bottom, the next folder auto-gets this index,
+                         * so we can easily auto-select the next folder (will have the same index) without changing any values.
+                         * Only when deleting bottom-to-top do we decrement the index.
+                         * */
+                        int selectedIndex = parentItem.Items.IndexOf(selectedItem);
+
+                        parentItem.Items.Remove(selectedItem); // Remove folder from tree.
+                        if (nChildren > 1)
+                        { // If folders still exist, auto-select.
+                            if (selectedIndex == nChildren - 1) // If last folder is selected.
+                            {
+                                selectedIndex = --selectedIndex; // Discarding from last folder to top folder, we need to decrease the index.
+                            }
+                                ((TreeViewItem)parentItem.Items[selectedIndex]).IsSelected = true;
+                            ((TreeViewItem)parentItem.Items[selectedIndex]).Focus();
+                        }
+                        /* End tree folder auto-select, on discard. */
+
+                        StatusLog.Text = "New folder & files created.";
                     }
-
-                    // * When moved .OBJs and .DDSs, move currentFolder to processedFolder.
-                    Directory.Move(SelectedImagePath, processedFolder);
-
-                    StatusLog.Text = "New folder & files created.";
                 }
             }
-         }
+            else
+            {
+                MessageBox.Show("You can only proccess folders inside a specific folder.");
+            }
+        }
 
         /************************** Button - Discard */
         private void btn_discardFolder_Click(object sender, RoutedEventArgs e)
@@ -244,7 +276,6 @@ namespace pasta5 {
                 // * Move discarded folder to storage.
                 Directory.Move(SelectedImagePath, discardedFolderPath);
 
-
                 // * Start tree folder auto-select, on discard.
                 int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
                 
@@ -264,6 +295,9 @@ namespace pasta5 {
                         ((TreeViewItem)parentItem.Items[selectedIndex]).Focus();
                 }
                 /* End tree folder auto-select, on discard. */
+
+                StatusLog.Text = "Folder discarded.";
+
             }
             else
             {
