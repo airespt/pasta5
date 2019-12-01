@@ -223,21 +223,41 @@ namespace pasta5 {
             TreeViewItem parentItem = (selectedItem.Parent as TreeViewItem);
             // (ParentItem.Items[ParentItem.Items.Count + 1] as TreeViewItem).IsSelected = true;
 
-            string nChildren = parentItem.Items.Count.ToString(); // item count in selectedItem's parent
+            string nChildren = parentItem.Items.Count.ToString(); // item count in selectedItem's parent's children
             int selectedIndex = parentItem.Items.IndexOf(selectedItem); // selected TreeViewItem index
+            
+            
 
-            parentItem.Items.Remove(selectedItem);
+            /*
+            if (parentItem.Items.Count == ++selectedIndex)
+            {
+                // If selected folder to delete is the last one of it's parent treeview, auto select the previous folder.
+                MessageBox.Show("you're deleting the last folder. auto select previous index");
+                // int selectThisIndex = --selectedIndex;
+            }
+            else
+            {
+                // If there's more folder below the selected folder, select the next folder.
+                MessageBox.Show("this ain't the last folder in the tv. auto select next index.");
+                // int selectThisIndex = ++selectedIndex;
+            }
+            */
+           //  parentItem.Items.Remove(selectedItem);
+            
+
+            /* SELECT NEXT ITEM */
             
 
             TreeViewItem tvi = foldersItem.ItemContainerGenerator.ContainerFromItem(selectedItem) as TreeViewItem;
+            
             if (tvi != null)
             {
                 tvi.IsSelected = true;
             }
-
+            
             // StatusLog.Text = nChildren;
-            StatusLog.Text = selectedIndex.ToString();
-
+            // StatusLog.Text = nChildren.ToString();
+            // MessageBox.Show(selectedIndex.ToString());
             /*
             StatusLog.Text = "";
 
