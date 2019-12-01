@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="pasta5" MinHeight="300" MinWidth="640" FontSize="12" FontFamily="Arial"
-        Background="#FFF0F0F0" AllowDrop="True" Height="500" Width="1021" >
+        Background="#FFF2F2F2" AllowDrop="True" Height="500" Width="1021" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -97,13 +97,13 @@
                 />
             </StackPanel>
             <!-- TreeView and OBJView -->
-                <!-- TODO:
+            <!-- TODO:
                             - Expand this Grid to 100% height of window;
                             - Add separate mouse wheel scroll only (no window scroll);
                             - Minimum column width because of GridSplitter.
                 -->
 
-            <Grid Grid.Row="2" Grid.ColumnSpan="2" >
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,5" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="5" />
@@ -112,7 +112,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                    <!-- ################## TreeView -->
+                <!-- ################## TreeView -->
                 <TreeView x:Name="foldersItem"
                           Background="#FFFFFFFF"
                           BorderBrush="#FFFFFFFF"
@@ -145,13 +145,13 @@
                 </TreeView>
 
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" IsTabStop="False" />
-                    
+
                 <!-- ################## OBJView -->
                 <ListBox x:Name="objList"
                          Grid.Column="2"
                          HorizontalContentAlignment="Stretch"
                          PreviewKeyDown="objList_KeyDown"
-                         SelectionChanged="objList_SelectionChanged"
+                         SelectionChanged="objList_SelectionChanged" BorderBrush="#90ABADB3" BorderThickness="0"
                          >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -167,22 +167,41 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <Grid Margin="0 5 0 0" Grid.Row="3" Grid.ColumnSpan="2">
+            <Grid Margin="0" Grid.Row="3" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50*" />
-                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Button x:Name="btn_discardFolder"
                         Content="Discard Folder"
-                        Width="110" Height="44" Click="btn_discardFolder_Click"
+                        Width="109"
+                        Height="38"
+                        Click="btn_discardFolder_Click"
+                        BorderBrush="#FFE24D39"
+                        Foreground="White"
+                        Background="#FFE24D39"
+                        FontFamily="Segoe UI"
+                        FontSize="14"
+                        HorizontalAlignment="Left"
+                        Padding="0"
+                        BorderThickness="0"
                         />
                 <Button x:Name="btn_keepFolder"
                         Content="Keep Folder"
                         Grid.Column="1"
-                        Width="150" Click="btn_keepFolder_Click"/>
+                        Width="102"
+                        Click="btn_keepFolder_Click"
+                        Background="#FF4283DE"
+                        Foreground="White"
+                        FontFamily="Segoe UI"
+                        FontSize="14"
+                        HorizontalAlignment="Right"
+                        Padding="0"
+                        BorderThickness="0"
+                        />
             </Grid>
         </Grid>
 
