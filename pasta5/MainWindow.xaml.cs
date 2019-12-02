@@ -176,6 +176,8 @@ namespace pasta5 {
         }
 
         /************************** Button - Keep */
+        /* The keep button, will create a new folder in FBX folder (where all folder are kept with OBJs, which i will then import into Blender).
+         * Selected OBJs and all DDSs are moved to that new folder. Dumped folder will move to a processed folder, so i have the list of folders i've went through. */
         private void btn_keepFolder_Click(object sender, RoutedEventArgs e)
         {
             TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
@@ -265,6 +267,8 @@ namespace pasta5 {
         }
 
         /************************** Button - Discard */
+        /* The discard button will move the selected folder to a storage folder, stripping it of it's DDSs first, to save HDD space.
+         * The storage folder will store folders i might want to revist for meshes later on. I will need to re-dump each of these folder's DDSs though.*/
         private void btn_discardFolder_Click(object sender, RoutedEventArgs e)
         {
             TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
@@ -273,11 +277,6 @@ namespace pasta5 {
 
             if (parentItem.Header.ToString() == allowedFolder)
             {
-                /* Discarding a folder will move it to a storage folder; i might want to come back to it later
-                    * and see if i'm interested in using the OBJs inside it.
-                    * We'll also be deleting all DDSs inside the folder, to save some HDD space, before discarding the folder.
-                */
-
                 // Variables
                 var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
                 var discardedFolderPath = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[NOT INTERESTED]", currentFolder); // Where to move the currentFolder to if i discard it.
@@ -301,21 +300,13 @@ namespace pasta5 {
                 }
                 else
                 {
-                    // * Hard delete the folder, because it has no meshes.
-                    Directory.Delete(SelectedImagePath, true);
+                    // * Inform to delete folder, instead of discarding.
+                    MessageBox.Show("Folder has no meshes. Delete it rather than discarding.");
                 }
             
-               
-
                 // * Start tree folder auto-select, on discard.
                 int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
-                
-                /* When deleting folders in the Tree, top-to-bottom, the next folder auto-gets this index,
-                 * so we can easily auto-select the next folder (will have the same index) without changing any values.
-                 * Only when deleting bottom-to-top do we decrement the index.
-                 * */
                 int selectedIndex = parentItem.Items.IndexOf(selectedItem); 
-
                 parentItem.Items.Remove(selectedItem); // Remove folder from tree.
                 if (nChildren > 1) { // If folders still exist, auto-select.
                     if (selectedIndex == nChildren - 1) // If last folder is selected.
@@ -326,14 +317,38 @@ namespace pasta5 {
                         ((TreeViewItem)parentItem.Items[selectedIndex]).Focus();
                 }
                 /* End tree folder auto-select, on discard. */
-
                 StatusLog.Text = "Folder discarded.";
-
             }
             else
             {
                 MessageBox.Show("You can only process folders inside the 'Dump folder'.");
             }
+        }
+
+        /************************** Button - Delete */
+        /* The delete button will hard delete the folder. This folder then won't show up in the discarded folder,
+            * as they don't hold any interesting meshes, or no meshes at all. Meaning if i wan't to go through the discarded folder,
+            i won't dump this folder for it's textures again and go through it again. */
+        private void Btn_deleteFolder_Click(object sender, RoutedEventArgs e)
+        {
+            Directory.Delete(SelectedImagePath, true); // Hard delete current folder.
+
+            // * Start tree folder auto-select, on discard.
+            TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
+            TreeViewItem parentItem = (selectedItem.Parent as TreeViewItem);
+            int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
+            int selectedIndex = parentItem.Items.IndexOf(selectedItem); // Get selected folder index.
+            parentItem.Items.Remove(selectedItem); // Remove folder from tree.
+            if (nChildren > 1)
+            { // If folders still exist, auto-select.
+                if (selectedIndex == nChildren - 1) // If last folder is selected.
+                {
+                    selectedIndex = --selectedIndex; // Discarding from last folder to top folder, we need to decrease the index.
+                }
+                ((TreeViewItem)parentItem.Items[selectedIndex]).IsSelected = true; // Select folder in tree.
+                ((TreeViewItem)parentItem.Items[selectedIndex]).Focus(); // Give it focus.
+            }
+            StatusLog.Text = "Folder deleted.";
         }
 
         /************************** Save Paths Button */

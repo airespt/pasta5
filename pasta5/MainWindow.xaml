@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="pasta5" MinHeight="300" MinWidth="640" FontSize="12" FontFamily="Arial"
-        Background="#FFF2F2F2" AllowDrop="True" Height="560" Width="1024" >
+        Background="#FFF2F2F2" AllowDrop="True" Height="560" Width="1120" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -166,19 +166,35 @@
             <Grid Margin="0,0,0,5" Grid.Row="3" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="btn_discardFolder"
-                        Content="Discard Folder"
+                <Button x:Name="btn_deleteFolder"
+                        Content="Delete Folder"
                         Width="109"
                         Height="38"
-                        Click="btn_discardFolder_Click"
+                        Click="Btn_deleteFolder_Click"
                         BorderBrush="#FFE24D39"
                         Foreground="White"
                         Background="#FFE24D39"
+                        FontFamily="Segoe UI"
+                        FontSize="14"
+                        HorizontalAlignment="Left"
+                        Padding="0"
+                        BorderThickness="0" Margin="0,0,5,0"
+                        />
+                <Button x:Name="btn_discardFolder"
+                        Grid.Column="1"
+                        Content="Discard For Later"
+                        Width="124"
+                        Height="38"
+                        Click="btn_discardFolder_Click"
+                        BorderBrush="#FFE24D39"
+                        Foreground="Black"
+                        Background="#FF747474"
                         FontFamily="Segoe UI"
                         FontSize="14"
                         HorizontalAlignment="Right"
@@ -186,7 +202,7 @@
                         BorderThickness="0" Margin="0,0,5,0"
                         />
                 <Button x:Name="btn_keepFolder"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         Content="Keep Folder"
                         Width="102"
                         Click="btn_keepFolder_Click"
