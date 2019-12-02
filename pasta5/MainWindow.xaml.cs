@@ -139,7 +139,6 @@ namespace pasta5 {
             {
                 return;
             }
-            StatusLog.Text = foldersItem.SelectedItem.ToString();
             loadModel(item.filepath);
         }
 
@@ -250,7 +249,7 @@ namespace pasta5 {
             string allowedFolder = "[MASS UNPACK - go through these in Noesis]"; // Set allowed folder to run the discard button.
 
             if (parentItem.Header.ToString() == allowedFolder)
-            { 
+            {
                 /* Discarding a folder will move it to a storage folder; i might want to come back to it later
                     * and see if i'm interested in using the OBJs inside it.
                     * We'll also be deleting all DDSs inside the folder, to save some HDD space, before discarding the folder.
@@ -260,21 +259,30 @@ namespace pasta5 {
                 var currentFolder = SelectedImagePath.Substring(SelectedImagePath.LastIndexOf("\\") + 1); // Get name of selected folder in TreeView.
                 var discardedFolderPath = Path.Combine(@"S:\ROTTR_DRMDumper_0.0.3a_r7\[NOT INTERESTED]", currentFolder); // Where to move the currentFolder to if i discard it.
 
-                // * Delete DDSs first.
+                // * Process folder.
                 var texturesFolder = Path.Combine(SelectedImagePath, "Texture"); // Where all DDSs are.
-                var ddsFiles = Directory.EnumerateFiles(texturesFolder, "*.dds", SearchOption.AllDirectories); // Delete DDSs separately, in case some have no containing folder.
-                foreach (string ddsFile in ddsFiles)
-                {
-                    File.Delete(ddsFile);
+                if (Directory.Exists(texturesFolder)) { // If directory doesn't exist, the currentFolder has no meshes, therefore was dumped without a 'textures' folder. Delete it instead of moving it.
+                    // * Delete DDS files and folders. // Delete DDSs separately, in case some have no containing folder. They always do, though, i think. Fuck it.
+                    var ddsFiles = Directory.EnumerateFiles(texturesFolder, "*.dds", SearchOption.AllDirectories);
+                    foreach (string ddsFile in ddsFiles)
+                    {
+                        File.Delete(ddsFile);
+                    }
+                    List<string> ddsDirs = new List<string>(Directory.EnumerateDirectories(texturesFolder));
+                    foreach (var ddsDir in ddsDirs)
+                    {
+                        Directory.Delete(ddsDir, true);
+                    }
+                    // * Move discarded folder to storage.
+                    Directory.Move(SelectedImagePath, discardedFolderPath);
                 }
-                List<string> ddsDirs = new List<string>(Directory.EnumerateDirectories(texturesFolder));
-                foreach (var ddsDir in ddsDirs)
+                else
                 {
-                    Directory.Delete(ddsDir, true);
+                    // * Hard delete the folder, because it has no meshes.
+                    Directory.Delete(SelectedImagePath, true);
                 }
-
-                // * Move discarded folder to storage.
-                Directory.Move(SelectedImagePath, discardedFolderPath);
+            
+               
 
                 // * Start tree folder auto-select, on discard.
                 int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
@@ -301,7 +309,7 @@ namespace pasta5 {
             }
             else
             {
-                MessageBox.Show("You can only proccess folders inside a specific folder.");
+                MessageBox.Show("You can only process folders inside the 'Dump folder'.");
             }
         }
 
@@ -344,11 +352,6 @@ namespace pasta5 {
                 Model.Content = null;
                 Console.Error.WriteLine(ex.ToString());
             }
-        }
-
-        private void btn_keepFolder_m_over(object sender, MouseEventArgs e)
-        {
-
         }
     }
 

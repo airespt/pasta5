@@ -28,13 +28,14 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <!-- Save Paths Button -->
-            <Button x:Name="btn_save_paths" IsEnabled="False"
+            <Button x:Name="btn_save_paths"
+                    IsEnabled="False"
                     Grid.Column="1"
                     Height="40" Width="61"
                     VerticalAlignment="Center"
@@ -42,8 +43,7 @@
                     Click="Btn_save_paths_Click"
                     Content="SAVE PATHS"
             />
-
-
+            
             <!-- Paths grid -->
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -76,34 +76,9 @@
             </Grid>
 
             <!-- Full Width controls -->
-            <StackPanel 
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                Margin="0 10 0 0"
-                >
-
-                <!-- Process Files and Folders Button -->
-                <TextBox x:Name="StatusLog"
-                         MinHeight="20"
-                         VerticalAlignment="Stretch"
-                         Margin="0,5"
-                         Padding="2"
-                         HorizontalScrollBarVisibility="Auto"
-                         VerticalScrollBarVisibility="Auto"
-                         BorderThickness="0"
-                         FontFamily="Segoe UI Semibold"
-                         Focusable="False"
-                         Cursor="Arrow"
-                />
-            </StackPanel>
+ 
             <!-- TreeView and OBJView -->
-            <!-- TODO:
-                            - Expand this Grid to 100% height of window;
-                            - Add separate mouse wheel scroll only (no window scroll);
-                            - Minimum column width because of GridSplitter.
-                -->
-
-            <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,5" >
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,10" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="5" />
@@ -117,7 +92,7 @@
                           Background="#FFFFFFFF"
                           BorderBrush="#FFFFFFFF"
                           Foreground="#FFFFFFFF"
-                          SelectedItemChanged="FoldersItem_SelectedItemChanged"
+                          SelectedItemChanged="FoldersItem_SelectedItemChanged" FontFamily="Segoe UI Semibold" FontSize="14"
                 >
                     <TreeView.Resources>
                         <Style TargetType="{x:Type TreeViewItem}">
@@ -167,10 +142,10 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <Grid Margin="0" Grid.Row="3" Grid.ColumnSpan="2">
+            <Grid Margin="0" Grid.Row="2" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -185,9 +160,9 @@
                         Background="#FFE24D39"
                         FontFamily="Segoe UI"
                         FontSize="14"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Right"
                         Padding="0"
-                        BorderThickness="0"
+                        BorderThickness="0" Margin="0,0,5,0"
                         />
                 <Button x:Name="btn_keepFolder"
                         Content="Keep Folder"
@@ -203,13 +178,28 @@
                         BorderThickness="0"
                         />
             </Grid>
+            <!-- Result  -->
+            <Grid Margin="0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+                <TextBox x:Name="StatusLog"
+                         MinHeight="20"
+                         VerticalAlignment="Stretch"
+                         Margin="0,5,0,0"
+                         Padding="2"
+                         HorizontalScrollBarVisibility="Auto"
+                         VerticalScrollBarVisibility="Auto"
+                         BorderThickness="0"
+                         FontFamily="Segoe UI Semibold"
+                         Focusable="False"
+                         Cursor="Arrow" Background="#00000000"
+                />
+            </Grid>
         </Grid>
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
         <!-- ################## 3D View-->
         <HelixToolkit:HelixViewport3D x:Name="Viewport"
             Grid.Column="2"
-            Margin="5 0 0 0"
+            Margin="0"
             BorderThickness="1"
             BorderBrush="LightGray"
             AllowDrop="True"
