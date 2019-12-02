@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="pasta5" MinHeight="300" MinWidth="640" FontSize="12" FontFamily="Arial"
-        Background="#FFF2F2F2" AllowDrop="True" Height="500" Width="1021" >
+        Background="#FFF2F2F2" AllowDrop="True" Height="560" Width="1024" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -29,6 +29,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
@@ -92,7 +93,7 @@
                           Background="#FFFFFFFF"
                           BorderBrush="#FFFFFFFF"
                           Foreground="#FFFFFFFF"
-                          SelectedItemChanged="FoldersItem_SelectedItemChanged" FontFamily="Segoe UI Semibold" FontSize="14"
+                          SelectedItemChanged="FoldersItem_SelectedItemChanged" FontFamily="Segoe UI Semilight" FontSize="14"
                 >
                     <TreeView.Resources>
                         <Style TargetType="{x:Type TreeViewItem}">
@@ -126,7 +127,9 @@
                          Grid.Column="2"
                          HorizontalContentAlignment="Stretch"
                          PreviewKeyDown="objList_KeyDown"
-                         SelectionChanged="objList_SelectionChanged" BorderBrush="#90ABADB3" BorderThickness="0"
+                         SelectionChanged="objList_SelectionChanged"
+                         BorderBrush="#90ABADB3"
+                         BorderThickness="0"
                          >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -135,14 +138,32 @@
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox IsChecked="{Binding isChecked, Mode=TwoWay}" />
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Text="{Binding filename}" />
+                                <CheckBox
+                                    IsChecked="{Binding isChecked, Mode=TwoWay}"
+                                    />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding filename}"
+                                    />
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <Grid Margin="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid Margin="0,0,0,10" Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontFamily="Segoe UI Light" HorizontalAlignment="Right" Margin="0,0,5,0">Toggle All/None</TextBlock>
+                    <CheckBox x:Name="chkbox_selAll"
+                              Grid.Column="1" Margin="0" Checked="Chkbox_selAll_Checked" Unchecked="Chkbox_selAll_Unchecked"
+                              />
+                </Grid>
+            </Grid>
+            <Grid Margin="0,0,0,5" Grid.Row="3" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto"/>
@@ -165,8 +186,8 @@
                         BorderThickness="0" Margin="0,0,5,0"
                         />
                 <Button x:Name="btn_keepFolder"
-                        Content="Keep Folder"
                         Grid.Column="1"
+                        Content="Keep Folder"
                         Width="102"
                         Click="btn_keepFolder_Click"
                         Background="#FF4283DE"
@@ -179,7 +200,7 @@
                         />
             </Grid>
             <!-- Result  -->
-            <Grid Margin="0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+            <Grid Margin="0" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Right">
                 <TextBox x:Name="StatusLog"
                          MinHeight="20"
                          VerticalAlignment="Stretch"

@@ -106,6 +106,7 @@ namespace pasta5 {
             /* Searches selected TreeView  sfolder for a RenderMesh subfolder. If it exists, load all .OBJs from it, and it's subfolders. */
             var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh"); // Folder to search for .OBJs in.
             objFilesModel.Clear();
+            
             if (Directory.Exists(renderMeshFolder))
             {
                 var objFiles = Directory.EnumerateFiles(renderMeshFolder, "*.obj", SearchOption.AllDirectories);
@@ -121,13 +122,12 @@ namespace pasta5 {
                     if (objFilesModel.Count() == 1)
                     {
                         loadModel(objFilesModel.First().filepath);
-                    } else
+                    }
+                    else
                     {
                         objList.SelectedIndex = 0;
                         // objList.Focus(); // Focus() here not working well; Moving up the TreeView, will not select SelectedIndex = 0
                     }
-                } else {
-                    objFilesModel.Clear();
                 }
             }
         }
@@ -150,6 +150,29 @@ namespace pasta5 {
             if( e?.Key == Key.Space ) {
                 item.isChecked = !item.isChecked;
             }
+        }
+
+        /************************** Toggle All OBJs Selected/Deselected */
+        private void Chkbox_selAll_Checked(object sender, RoutedEventArgs e)
+        {
+            ToggleAllChkBoxes(true);
+        }
+
+        private void Chkbox_selAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ToggleAllChkBoxes(false);
+        }
+
+        private void ToggleAllChkBoxes(bool selectOrNot)
+        {
+            /*
+            foreach (CheckBox chkbox in Controls.OfType<CheckBox>())
+            {
+                // chkBox.isSelected = selectOrNot;
+                Console.WriteLine(chkbox.Name);
+            }
+            */
+            MessageBox.Show(selectOrNot.ToString());
         }
 
         /************************** Button - Keep */
@@ -354,8 +377,4 @@ namespace pasta5 {
             }
         }
     }
-
-    
-
-
 }
