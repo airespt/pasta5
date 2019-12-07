@@ -102,32 +102,43 @@ namespace pasta5 {
                 temp2 = @"\";
             }
 
-            /* Load OBS List */
-            /* Searches selected TreeView  sfolder for a RenderMesh subfolder. If it exists, load all .OBJs from it, and it's subfolders. */
-            var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh"); // Folder to search for .OBJs in.
-            objFilesModel.Clear();
-            
-            if (Directory.Exists(renderMeshFolder))
-            {
-                var objFiles = Directory.EnumerateFiles(renderMeshFolder, "*.obj", SearchOption.AllDirectories);
-                foreach (string currentFile in objFiles)
-                {
-                    string fileName = Path.GetFileName(currentFile);
-                    objFilesModel.Add(new ObjFileItem { filename = fileName, filepath = currentFile });
-                }
+            /* Load OBJs List On Folder Select */
+             /* Here, we make a distinction how pasta5 looks for OBJs:
+              * When dumping, Noesis, for each folder it goes through recursively, creates a subfolder to accomodate each OBJ it creates,
+              * These subfolders reside inside the RenderMesh folder.
+              * So, when selecting a folder and loading OBJs, we only search in the subfolders, if we are inside the RenderMesh folder.
+              * Otherwise, in worst case scenario, when selecting a drive, pasta5 would look for OBJs throughout the entire drive.
+             */
+            var renderMeshFolder = Path.Combine(SelectedImagePath, "RenderMesh"); // Folder name to tell pasta5 to search subfolders as well.
 
-                // Auto-load first model of TreeView selected folder, if any exists. Else, clear list for visual hint.
-                if (objFilesModel.Any())
+            objFilesModel.Clear();
+            IEnumerable<string> objFiles;
+
+            if (Directory.Exists(renderMeshFolder)) // Search subfolders too.
+            {
+                objFiles = Directory.EnumerateFiles(renderMeshFolder, "*.obj", SearchOption.AllDirectories);
+            }
+            else // Search selected folder only. No capes!
+            {
+                objFiles = Directory.EnumerateFiles(SelectedImagePath, "*.obj");
+            }
+            foreach (string currentFile in objFiles)
+            {
+                string fileName = Path.GetFileName(currentFile);
+                objFilesModel.Add(new ObjFileItem { filename = fileName, filepath = currentFile });
+            }
+
+            // Auto-load first model of TreeView selected folder, if any exists. Else, clear list for visual hint.
+            if (objFilesModel.Any())
+            {
+                if (objFilesModel.Count() == 1)
                 {
-                    if (objFilesModel.Count() == 1)
-                    {
-                        loadModel(objFilesModel.First().filepath);
-                    }
-                    else
-                    {
-                        objList.SelectedIndex = 0;
-                        // objList.Focus(); // Focus() here not working well; Moving up the TreeView, will not select SelectedIndex = 0
-                    }
+                    loadModel(objFilesModel.First().filepath);
+                }
+                else
+                {
+                    objList.SelectedIndex = 0;
+                    // objList.Focus(); // Focus() here not working well; Moving up the TreeView, will not select SelectedIndex = 0
                 }
             }
         }
