@@ -193,7 +193,7 @@ namespace pasta5 {
         {
             TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
             TreeViewItem parentItem = (selectedItem.Parent as TreeViewItem);
-            string allowedFolder = "[MASS UNPACK - go through these in Noesis]"; // Set allowed folder to run the discard button.
+            string allowedFolder = "[MASS UNPACK - go through these in Noesis]"; // Set allowed folder to run the keep button.
 
             if (parentItem.Header.ToString() == allowedFolder)
             {
@@ -273,7 +273,7 @@ namespace pasta5 {
             }
             else
             {
-                MessageBox.Show("You can only proccess folders inside a specific folder.");
+                MessageBox.Show("You can only proccess folders inside the 'Dump folder'.");
             }
         }
 
@@ -342,24 +342,33 @@ namespace pasta5 {
             i won't dump this folder for it's textures again and go through it again. */
         private void Btn_deleteFolder_Click(object sender, RoutedEventArgs e)
         {
-            Directory.Delete(SelectedImagePath, true); // Hard delete current folder.
-
-            // * Start tree folder auto-select, on discard.
             TreeViewItem selectedItem = (foldersItem.SelectedItem as TreeViewItem);
             TreeViewItem parentItem = (selectedItem.Parent as TreeViewItem);
-            int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
-            int selectedIndex = parentItem.Items.IndexOf(selectedItem); // Get selected folder index.
-            parentItem.Items.Remove(selectedItem); // Remove folder from tree.
-            if (nChildren > 1)
-            { // If folders still exist, auto-select.
-                if (selectedIndex == nChildren - 1) // If last folder is selected.
-                {
-                    selectedIndex = --selectedIndex; // Discarding from last folder to top folder, we need to decrease the index.
+            string allowedFolder = "[MASS UNPACK - go through these in Noesis]"; // Set allowed folder to run the discard button.
+
+            if (parentItem.Header.ToString() == allowedFolder)
+            {
+                Directory.Delete(SelectedImagePath, true); // Hard delete current folder.
+
+                // * Start tree folder auto-select, on discard.
+                int nChildren = parentItem.Items.Count; // Sub-folder count of allowed folder.
+                int selectedIndex = parentItem.Items.IndexOf(selectedItem); // Get selected folder index.
+                parentItem.Items.Remove(selectedItem); // Remove folder from tree.
+                if (nChildren > 1)
+                { // If folders still exist, auto-select.
+                    if (selectedIndex == nChildren - 1) // If last folder is selected.
+                    {
+                        selectedIndex = --selectedIndex; // Discarding from last folder to top folder, we need to decrease the index.
+                    }
+                    ((TreeViewItem)parentItem.Items[selectedIndex]).IsSelected = true; // Select folder in tree.
+                    ((TreeViewItem)parentItem.Items[selectedIndex]).Focus(); // Give it focus.
                 }
-                ((TreeViewItem)parentItem.Items[selectedIndex]).IsSelected = true; // Select folder in tree.
-                ((TreeViewItem)parentItem.Items[selectedIndex]).Focus(); // Give it focus.
+                StatusLog.Text = "Folder deleted.";
             }
-            StatusLog.Text = "Folder deleted.";
+            else
+            {
+                MessageBox.Show("You can only delete folders inside the 'Dump folder'.");
+            }
         }
 
         /************************** Save Paths Button */
