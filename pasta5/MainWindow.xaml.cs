@@ -254,6 +254,18 @@ namespace pasta5 {
                                 Directory.Move(ddsFile, Path.Combine(newFolder, "textures", ddsFileName));
                             }
 
+                            /* Delete all files and folders except RenderMesh, before moving to processedFolder as backup.
+                             These backup/reference folders are starting to take up a lot of HDD space!
+                             */
+                            DirectoryInfo baseFolder = new DirectoryInfo(SelectedImagePath);
+                             foreach (var dir in baseFolder.EnumerateDirectories())
+                            {
+                                if(dir.Name != "RenderMesh")
+                                {
+                                    Directory.Delete(dir.FullName, true);
+                                }
+                            }
+
                             // * When moved .OBJs and .DDSs, move currentFolder to processedFolder.
                             Directory.Move(SelectedImagePath, processedFolder);
 
