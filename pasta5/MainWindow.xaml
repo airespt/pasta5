@@ -8,11 +8,11 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="pasta5" MinHeight="300" MinWidth="640" FontSize="12" FontFamily="Arial"
-        Background="#FFF2F2F2" AllowDrop="True" Height="560" Width="1120" >
+        Background="#FFF2F2F2" AllowDrop="True" Height="800" Width="1300" >
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".5*" />
+            <ColumnDefinition Width=".7*" />
             <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
